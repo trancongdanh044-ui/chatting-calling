@@ -1,0 +1,44 @@
+extends ../../layouts/auth.pug
+
+block right
+  .col-6
+    h1(class="mb-4 text-center") Đăng nhập tài khoản
+    .inner-login
+      form(action="/auth/login" method="POST")
+        .mb-3
+          label.form-label(for="email") Email
+          input.form-control(
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Nhập email của bạn"
+            required
+          )
+
+        .mb-3
+          label.form-label(for="password") Mật khẩu
+          input.form-control(
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Nhập mật khẩu"
+            required
+          )
+
+        .form-check.mb-3
+          input.form-check-input(
+            type="checkbox"
+            id="view-password"
+          )
+          label.form-check-label(for="view-password")
+            | Hiển thị mật khẩu
+
+        button.btn.btn-primary.w-100(type="submit")
+          | Đăng nhập
+      .flex-column.gap-2.mt-3
+        .d-flex.justify-content-between.align-items-center
+          a(href="/auth/sign-up" class="link-primary text-decoration-none")
+            | Đăng ký tài khoản
+
+          a(href="/auth/forgot-password" class="link-secondary text-decoration-none")
+            | Quên mật khẩu
