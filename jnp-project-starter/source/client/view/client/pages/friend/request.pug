@@ -1,0 +1,27 @@
+extends ../../layouts/default.pug
+include ../../mixins/friend-tool-bar.pug
+include ../../mixins/box-head.pug
+
+block main
+  .request-friend(data-request-friend=myUser.id)
+    .container
+      +friend-tool-bar 
+      +box-head("Lời mời đã gửi")
+      .row(request)
+        each reqUser in requestFriends 
+          .col-6(req-user-id=reqUser.id)
+            div(class="box-users")
+              div(class="inner-avatar")
+                img(
+                  src=(reqUser.avatar ? reqUser.avatar : "/client/images/avatar.jpg")
+                  alt=reqUser.fullName
+                )
+              div(class="inner-info")
+                div(class="inner-name") #{reqUser.fullName}
+                div(class="inner-buttons")
+                  button(
+                    class="btn btn-sm btn-secondary mr-1"
+                    btn-revoke-friend
+                  ) Huỷ
+block script
+  script(src="/client/js/friend.js")

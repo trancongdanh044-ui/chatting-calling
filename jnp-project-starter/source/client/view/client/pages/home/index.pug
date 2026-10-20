@@ -1,4 +1,11 @@
 extends ../../layouts/default.pug
 
-block main 
-  div Trang chủ
+block main
+  .main-row
+    include ../../partials/sider.pug
+    include ../../partials/main-chat.pug
+
+block script 
+  script(src="/client/js/alert.js")
+  //- Chat
+  script(src="/client/js/chat.js")

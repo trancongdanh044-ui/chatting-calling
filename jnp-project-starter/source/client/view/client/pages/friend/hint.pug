@@ -1,0 +1,35 @@
+extends ../../layouts/default.pug
+include ../../mixins/friend-tool-bar.pug
+include ../../mixins/box-head.pug
+
+block main
+  .hint-friend(data-hint-user=myUser.id)
+    .container
+      +friend-tool-bar 
+      +box-head("Gợi ý bạn bè")
+      .row(hint)
+        each userHint in userHintList
+          .col-6(user-hint-id=userHint.id)
+            div(class="box-users")
+              div(class="inner-avatar")
+                img(
+                  src=(userHint.avatar ? userHint.avatar : "/client/images/avatar.jpg")
+                  alt=userHint.fullName
+                )
+              div(class="inner-info")
+                div(class="inner-name") #{userHint.fullName}
+                div(class="inner-buttons")
+                  button(
+                    class="btn btn-sm btn-primary mr-1"
+                    btn-add-friend
+                  ) Thêm bạn bè
+                  button(
+                    class="btn btn-sm btn-secondary mr-1"
+                    btn-remove-friend
+                  ) Gỡ
+                  button(
+                    class="btn btn-sm btn-secondary mr-1"
+                    btn-cancel-friend
+                  ) Huỷ
+block script
+  script(src="/client/js/friend.js")

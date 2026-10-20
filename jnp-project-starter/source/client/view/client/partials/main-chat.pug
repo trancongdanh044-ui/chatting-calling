@@ -1,0 +1,59 @@
+.chat(my-user-id=myUser.id)
+  .inner-head
+    div(class="box-user")
+      div(class="user-avatar")
+        img(src="", alt="")
+      div(class="user-info")
+        div(class="user-name") Lê Văn B 
+        div(class="user-status") 
+          span Hoạt động 4 giờ trước
+    div(class="box-tool")
+      div(class="tool-item" call) <i class="fa-solid fa-phone"></i>
+      div(class="tool-item" video-call) <i class="fa-solid fa-video"></i>
+      div(class="tool-item" info) <i class="fa-solid fa-circle-info"></i>
+  .inner-body
+    each chat in chats 
+      div(class=(chat.user_id == myUser.id ? "inner-outcoming" : "inner-incoming" ))
+        if(chat.user_id != myUser.id)
+          .inner-name
+            | #{chat.fullName}
+        if(chat.content)
+          .inner-content 
+            | #{chat.content}
+        if(chat.images.length > 0)
+          .inner-images
+            each image in chat.images 
+              img(src=image, alt="Ảnh" width="250px" height="auto")
+    //- div(class="inner-list-typing")
+    //-   div(class="box-typing")
+    //-     div(class="inner-name") Lê Văn A
+    //-     div(class="inner-dots")
+    //-       span
+    //-       span 
+    //-       span
+  .inner-preview-images 
+    div(class="custom-file-container" data-upload-id="upload-image")
+  .inner-foot
+    form(
+      class="inner-form"
+      action=""
+      method="POST"
+    )
+      input(
+        type="text"
+        placeholder="Nhập nội dung..."
+        name="content"
+      )
+      label(
+        for="file-upload-with-preview-upload-image" 
+        class="btn btn-primary mb-0 m-2"
+      ) 
+        i(class="fa-solid fa-image")
+      span(
+        class="button-icon"
+      )
+        i(class="fa-solid fa-face-smile")
+      button(
+        type="submit"
+      )
+        i.fa-solid.fa-paper-plane

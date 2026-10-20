@@ -1,0 +1,27 @@
+mixin friend-tool-bar 
+  .row 
+    .col-3
+      a(href="/friend" class="friend-tool") Bạn bè
+    .col-3
+      a(href="/friend/hint" class="friend-tool") Gợi ý bạn bè
+    .col-3
+      a(href="/friend/request" class="friend-tool" title="Lời mời đã gửi") Lời mời đã gửi
+        //- span(class="badge badge-sm badge-danger") 1 
+      //- Lời mời đã gửi
+    .col-3
+      a(href="/friend/invitation" class="friend-tool" title="Lời mời kết bạn") Lời mời kết bạn
+        span(class="badge badge-sm badge-danger" badge-invitation=myUser.id) #{myUser.invitationFriends.length}
+      //- Lời mời kết bạn
+  .row
+    .col-4
+      div(class="friend-filter") Sắp xếp theo 
+        select(name="")
+          option(value="fullName asc") Tên A-Z 
+          option(value="fulLName desc") Tên Z-A
+        button(class="btn btn-sm btn-primary" filter-btn) Lọc
+    .col-2
+    .col-6
+      div(class="friend-search")
+        input(type="text" name="friend-search" placeholder="Tìm kiếm bạn bè tại đây...")
+        button(class="btn btn-sm btn-primary" search-btn) Tìm
+      

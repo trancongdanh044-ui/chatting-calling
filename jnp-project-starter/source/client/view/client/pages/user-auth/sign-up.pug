@@ -1,16 +1,19 @@
 extends ../../layouts/auth.pug
+include ../../mixins/alert.pug
 
-block right 
+block right
+  +alert-success(5000)
+  +alert-error(5000)
   .col-6
     h1(class="mb-4 text-center") Đăng ký tài khoản
     .inner-login
       form(action="/auth/sign-up" method="POST")
         .mb-3
-          label.form-label(for="name") Họ và tên
+          label.form-label(for="fullName") Họ và tên
           input.form-control(
             type="text"
-            id="name"
-            name="name"
+            id="fullName"
+            name="fullName"
             placeholder="Nhập tên của bạn"
             required
           )
@@ -55,3 +58,6 @@ block right
 
         button.btn.btn-primary.w-100(type="submit")
           | Đăng ký
+
+block script
+  script(src="/client/js/alert.js")

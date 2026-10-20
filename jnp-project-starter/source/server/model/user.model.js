@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const generate = require('../helpers/generate');
+const generateHelper = require('../helper/generate');
 
 const userSchema = new mongoose.Schema({
   fullName: String,
@@ -8,15 +8,15 @@ const userSchema = new mongoose.Schema({
   phone: String,
   tokenUser: {
     type: String,
-    default: generate.generateRandomString(20)
+    default: generateHelper.generateRandomString(20)
   },
   avatar: String,
   friendsList: [{
     user_id: String,
     room_chat_id: String
   }],
-  acceptFriends: Array, // Người khác gủi add friend
-  requestFriends: Array, // Mình gửi add friend
+  invitationFriends: Array, // Lời mời kết bạn của người khác gửi cho mình
+  requestFriends: Array, // Mình gửi yêu câu kết bạn cho ngừi khác
   statusOnline: String,
   status: {
     type: String,

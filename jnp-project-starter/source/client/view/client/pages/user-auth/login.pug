@@ -1,6 +1,9 @@
 extends ../../layouts/auth.pug
+include ../../mixins/alert.pug
 
 block right
+  +alert-success(5000)
+  +alert-error(5000)
   .col-6
     h1(class="mb-4 text-center") Đăng nhập tài khoản
     .inner-login
@@ -42,3 +45,5 @@ block right
 
           a(href="/auth/forgot-password" class="link-secondary text-decoration-none")
             | Quên mật khẩu
+block script
+  script(src="/client/js/alert.js")

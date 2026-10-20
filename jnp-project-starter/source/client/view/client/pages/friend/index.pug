@@ -1,0 +1,29 @@
+extends ../../layouts/default.pug
+include ../../mixins/friend-tool-bar.pug
+include ../../mixins/box-head.pug
+
+block main
+  .friend
+    .container
+      +friend-tool-bar
+      +box-head("Danh sách bạn bè")
+      .row(data-users-friends)
+        each friend in friendsList
+          .col-6(friend-id=friend.id)
+            div(class="box-users")
+              div(class="inner-avatar")
+                img(
+                  src=(friend.avatar ? friend.avatar : "/client/images/avatar.jpg")
+                  alt=friend.fullName
+                )
+              div(class="inner-info")
+                div(class="inner-name") #{friend.fullName}
+                div(class="inner-buttons")
+                  a(
+                    href=`/${friend.roomChatId}`
+                    class="btn btn-sm btn-primary mr-1"
+                  ) Nhắn tin 
+              div(
+                class="inner-status"
+                status=friend.statusOnline
+              ) <i class="fa-solid fa-circle"></i>

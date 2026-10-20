@@ -9,25 +9,26 @@ header.header
         .inner-menu 
           ul 
             li 
-              a(href="#" title="Gợi ý kết bạn") <i class="fa-solid fa-lightbulb"></i> 
-              //- Gợi ý kết bạn
+              a(href="/" title="Trang chủ") 
+                <i class="fa-solid fa-house"></i>
+              //- Trang chủ
             li 
-              a(href="#" title="Bạn bè") <i class="fa-solid fa-user-group"></i> 
+              a(href="/friend" title="Bạn bè") 
+                <i class="fa-solid fa-user-group"></i> 
               //- Bạn bè
             li  
-              a(href="#" title="Nhóm") <i class="fa-solid fa-users-line"></i> 
+              a(href="/group" title="Nhóm") 
+                <i class="fa-solid fa-users-line"></i> 
               //- Nhóm
-            li
-              a(href="#" title="Lời mời đã gửi") <i class="fa-solid fa-envelope-circle-check"></i> 
-              //- Lời mời đã gửi
-            li
-              a(href="#" title="Lời mời kết bạn") <i class="fa-solid fa-person-circle-question"></i> 
-              //- Lời mời kết bạn
+            li 
+              a(href="/notification" title="Thông báo") 
+                <i class="fa-solid fa-bell"></i>
+                span(class="badge badge-sm badge-danger") 1 
+              //- Thông báo
       .col-3
-        .inner-feature
+        .inner-profile
           ul
             li 
-              a(href="#" title="Thông báo") <i class="fa-solid fa-bell"></i> 
-              //- Thông báo
-            li 
-              a(href="#") T
+              a(href="/user/profile" title="Thông tin cá nhân")
+                  h3 #{myUser.fullName}
+                  img(src=(myUser.avatar ? myUser.avatar : "/client/images/avatar.jpg") alt="avatar")
