@@ -1,40 +1,35 @@
-const Chat = require('../model/chat.model');
 const User = require('../model/user.model');
-const chatSocket = require('../socket/chat.socket');
+const RoomChat = require('../model/room-chat.model');
 
 module.exports.index = async (req, res) => {
-  // Chat socket
-  chatSocket(req, res);
-  // Chat socket
 
-  // const roomChatId = req.params.roomChatId;
-  // Friend List
+  // Room Chat List
   const myUser = res.locals.myUser;
-  const friendIds = myUser.friendsList.map((friend) => friend.id);
-  let friendsList = await User.find({
-    _id: {
-      $in: friendIds
-    }
-  }).select("-password -tokenUser");
-  // End Friend List
-
-  // Chat
-  let chats = await Chat.find({
+  const roomChatList = await RoomChat.find({
     deleted: false,
-    // room_chat_id: roomChatId
+    "users.user_id": myUser.id
   });
+  // console.log(roomChatList);
 
-  for(const chat of chats){
-    const infoUser = await User.findOne({
-      _id: chat.user_id
-    }).select("fullName");
-    chat.fullName = infoUser.fullName;
+  for (const roomChat of roomChatList) {
+    if (roomChat.typeRoom === "friend") {
+      const friendId = roomChat.users.find(user => user.user_id != myUser.id)?.user_id;
+      const friend = await User.findOne({
+        _id: friendId
+      });
+      roomChat.avatar = friend.avatar || "/client/images/avatar.jpg"
+      roomChat.title = friend.fullName;
+      roomChat.statusOnlineFriend = friend.statusOnline;
+    } else if (roomChat.typeRoom === "group") {
+      if (!roomChat.avatar) {
+        roomChat.avatar = "/client/images/group-avatar.png"
+      }
+    }
   }
-  // End Chat
+  // End Room Chat List
 
   res.render("client/pages/home/index.pug", {
     pageTitle: "Trang chủ",
-    friendsList: friendsList,
-    chats: chats
+    roomChatList: roomChatList
   });
 }

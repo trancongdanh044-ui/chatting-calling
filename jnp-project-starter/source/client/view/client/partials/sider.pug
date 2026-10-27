@@ -10,38 +10,20 @@ div(class="menu")
       div(class="feature-item" fillter-friend) Bạn bè
       div(class="feature-item" fillter-group) Nhóm
     div(class="menu-item")
-      a(class="inner-item" href="#")
-        div(class="box-avatar")
-          img(src="", alt="")
-        div(class="box-info")
-          div(class="info-name") Lê Văn B 
-          div(class="info-message")
-            span(class="message-brief") Chào bạn.
-            span(class="message-time") 2 ngày
-      
-      div(class="inner-item")
-        div(class="box-avatar")
-          img(src="", alt="")
-        div(class="box-info")
-          div(class="info-name") Lê Văn B 
-          div(class="info-message")
-            span(class="message-brief") Chào bạn.
-            span(class="message-time") 2 ngày
-      
-      div(class="inner-item")
-        div(class="box-avatar")
-          img(src="", alt="")
-        div(class="box-info")
-          div(class="info-name") Lê Văn B 
-          div(class="info-message")
-            span(class="message-brief") Chào bạn.
-            span(class="message-time") 2 ngày
-      div(class="inner-item")
-        div(class="box-avatar")
-          img(src="", alt="")
-        div(class="box-info")
-          div(class="info-name") Lê Văn B 
-          div(class="info-message")
-            span(class="message-brief") Chào bạn.
-            span(class="message-time") 2 ngày
-
+      if(roomChatList.length > 0)
+        each roomChat in roomChatList
+          a(class="inner-item" href=`/chat/${roomChat.id}`)
+            div(class="box-avatar")
+              img(src=roomChat.avatar, alt="Avatar Chat")
+              div(class="box-status" statusOnline=roomChat.statusOnlineFriend)
+            div(class="box-info")
+              div(class="info-name") #{roomChat.title}
+              div(class="info-message")
+                if(roomChat.latestMessage.content)
+                  if(roomChat.latestMessage.user_id == myUser.id)
+                    span(class="message-brief") #{`Bạn: ${roomChat.latestMessage.content}`}
+                  else
+                    span(class="message-brief") #{`${roomChat.latestMessage.user_name}: ${roomChat.latestMessage.content}`}
+                else
+                  span(class="message-brief") Hãy bắt đầu trò chuyện
+                span(class="message-time") #{roomChat.latestUpdate}

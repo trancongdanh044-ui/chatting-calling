@@ -165,7 +165,8 @@
   border-right:solid 1px;
   border-radius: 8px;
   z-index: 1000;
-  height: calc(100% - 100px);
+  height: auto;
+  max-height: calc(100% - 100px);
 }
 
 .menu .inner-menu{
@@ -225,6 +226,9 @@
  display: flex;
  flex-direction: column;
  padding: 5px;
+ height: auto;
+ max-height: 450px;
+ overflow-y: auto;
 }
 
 .menu .inner-menu .menu-item .inner-item{
@@ -239,7 +243,19 @@
 }
 
 .menu .inner-menu .menu-item .inner-item .box-avatar{
- margin-right: 10px;
+  margin-right: 10px;
+  position: relative;
+}
+
+.menu .inner-menu .menu-item .inner-item .box-avatar .box-status[statusOnline="online"]{
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #00d800;
+  right: 5px;
+  bottom: 1px;
+  opacity: 1;
 }
 
 .menu .inner-menu .menu-item .inner-item .box-avatar img{
@@ -278,7 +294,6 @@
 
 /* End Main-row */
 
-
 /* End Sider */
 .chat {
   position: fixed;
@@ -288,7 +303,8 @@
   overflow: hidden;
   background: #fff;
   width: 69%;
-  height: calc(100% - 100px);
+  height: 600px;
+  max-height: calc(100% - 100px);
   left: 30%;
 }
 
@@ -308,6 +324,18 @@
 
 .chat .inner-head .box-user .user-avatar{
   margin: 0px 5px;
+  position: relative;
+}
+
+.chat .inner-head .box-user .user-avatar .box-user-status[statusOnline="online"]{
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #00d800;
+  right: 3px;
+  bottom: 1px;
+  opacity: 1;
 }
 
 .chat .inner-head .box-user .user-avatar img{
@@ -353,15 +381,30 @@
 /* Phần hiển thị tin nhắn */
 .chat .inner-body {
   height: calc(100% - 110px);
+  /* height: 100px; */
   padding: 15px;
   overflow-y: auto;
   background: #f5f5f5;
+  position: relative;
 }
 
 /* Tin nhắn nhận */
 .chat .inner-incoming {
   margin-bottom: 15px;
   max-width: 70%;
+  display: flex;
+  align-items: center;
+}
+
+.chat .inner-incoming .inner-avatar{
+ margin-right: 5px;
+}
+
+.chat .inner-incoming .inner-avatar img{
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  border-radius: 50%;
 }
 
 .chat .inner-incoming .inner-name {
@@ -378,6 +421,7 @@
   border-top-left-radius: 3px;
   color: #333;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  text-wrap: wrap;
 }
 
 /* Tin nhắn gửi */
@@ -397,6 +441,7 @@
   border-radius: 15px;
   border-top-right-radius: 3px;
   text-align: left;
+  text-wrap: wrap;
 }
 
 /* Nếu sửa inner-conntent thành inner-content
@@ -467,7 +512,11 @@
 }
 
 .chat .inner-preview-images{
-  position: relative;
+  position: absolute;
+  bottom: 50px;
+  z-index: 1000;
+  width: 100%;
+  text-wrap: wrap;
 }
 
 .chat .inner-preview-images .label-container{
@@ -502,7 +551,15 @@
   cursor: pointer;
 }
 
-.tooltip{
+.tooltip {
+  position: absolute !important;
+  right: 5px !important;
+  bottom: 60px !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+  margin: 0 !important;
+  z-index: 9999;
   opacity: 1;
 }
 
@@ -848,3 +905,186 @@
   margin-top: 100px;
 }
 /* End Hint - Request - Invite friend */
+
+/* Group */
+.group{
+  margin-top: 100px;
+}
+
+.group .inner-body .box-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 300px;
+}
+
+.group .inner-body .box-avatar img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.group .inner-body .box-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.group .inner-body .box-info  .box-groupname {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+/* End Group */
+
+/* Group Create */
+.group-create{
+  margin-top: 100px;
+}
+
+.group-create {
+  padding: 30px 0;
+  color: #24334d;
+}
+
+.group-create .group-body {
+  width: 100%;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.group-create .group-name {
+  margin-bottom: 20px;
+}
+
+.group-create .group-name .form-control,
+.group-create .group-search .form-control {
+  height: 48px;
+  border: 1px solid #dee2e6;
+  border-radius: 24px;
+  padding: 10px 18px;
+  font-size: 15px;
+  box-shadow: none;
+}
+
+.group-create .group-name .form-control:focus,
+.group-create .group-search .form-control:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.group-create .group-search {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.group-create .group-search i {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  color: #718096;
+}
+
+.group-create .group-search .form-control {
+  padding-left: 42px;
+}
+
+.group-create .group-friends {
+  max-height: 420px;
+  overflow-y: auto;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 8px 0;
+}
+
+.group-create .group-friend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px;
+  margin: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.group-create .group-friend:hover {
+  background: #f3f6fa;
+}
+
+.group-create .group-friend input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #007bff;
+}
+
+.group-create .friend-avatar img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #e5e7eb;
+}
+
+.group-create .friend-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #24334d;
+}
+
+.group-create .group-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
+}
+
+.group-create .group-footer .btn {
+  min-width: 100px;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.group-create .group-footer .btn-primary {
+  background: #1877f2;
+  border-color: #1877f2;
+}
+
+.group-create .group-footer .btn-primary:hover {
+  background: #0866d6;
+}
+
+.group-create .group-footer .btn-primary:disabled {
+  background: #a8c7fa;
+  border-color: #a8c7fa;
+}
+
+@media (max-width: 576px) {
+  .group-create {
+    padding: 15px 0;
+  }
+
+  .group-create .group-body {
+    padding: 14px;
+  }
+
+  .group-create .group-friends {
+    max-height: 350px;
+  }
+
+  .group-create .friend-avatar img {
+    width: 42px;
+    height: 42px;
+  }
+}
+/* End Group Create */

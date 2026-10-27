@@ -1,0 +1,17 @@
+extends ../../layouts/default.pug
+
+block main
+  .main-row
+    include ../../partials/sider.pug
+    include ../../partials/main-chat.pug
+
+block script 
+  script(src="/client/js/alert.js")
+  //- Chat
+  script(type="module" src="/client/js/chat.js")
+  //- Emoji-picker
+  script(type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js")
+  //- File upload with preview
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/file-upload-with-preview/6.1.2/index.iife.js" integrity="sha512-f4/JDhTsmjyy9ppmEK9CJLvhnlELBgrPJFQJVWEG1jPDdHF5FqsslKzgkfDRDic3joN/p3xlscJ1338c0GOl+w==" crossorigin="anonymous" referrerpolicy="no-referrer")
+  //- Viewer-js
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.15.2/viewer.min.js" integrity="sha512-RE1c8r+KlbllMFzXjthZ9+DduJ0K4oZbzEW8qjALOaYi+CunDmOEYfToz47YzW5htFbxvBSCS9dLvsTFraYCIQ==" crossorigin="anonymous" referrerpolicy="no-referrer")

@@ -1,0 +1,49 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+
+block main 
+  .group-create
+    +alert-success(5000)
+    +alert-error(5000)
+    .container
+      .row
+        +box-head("Tạo nhóm") 
+      
+      .row
+        .group-body
+          .group-search
+            i.fas.fa-search
+            input(
+              class="form-control"
+              type="text"
+              placeholder="Nhập tên, số điện thoại, hoặc email"
+              id="group-search"
+            )
+          form#formCreateGroup(action="/group/create" method="POST")
+            .group-name
+              //- input#group-avatar(type="file" name="avatar" accept="image/*" hidden)
+              input#groupName.form-control(
+                type="text"
+                name="groupName"
+                placeholder="Nhập tên nhóm..."
+              )
+            
+            .group-friends
+              each friend in friendsList
+                label.group-friend
+                  input(
+                    type="checkbox"
+                    name="members"
+                    value=friend._id
+                  )
+                  .friend-avatar
+                    img(
+                      src=friend.avatar || "/client/images/avatar.jpg"
+                      alt=friend.fullName
+                    )
+                  .friend-name=friend.fullName
+
+            .group-footer
+              //- button.btn.btn-light(type="button" data-dismiss="modal") Hủy
+              button.btn.btn-primary(type="submit") Tạo nhóm

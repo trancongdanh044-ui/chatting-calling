@@ -1,0 +1,40 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  .group
+    .container
+      .inner-head
+        .row 
+          .col-6 
+            div(class="form-group d-flex")
+              input(
+                class="form-control mr-2"
+                type="text"
+                name="group",
+                placeholder="Tìm kiếm nhóm của bạn tại đây..."
+                id="group"
+              )
+              button(
+                class="btn btn-primary"
+              ) Tìm
+          .col-4
+          .col-2
+            div(class="form-group d-flex")
+              a(
+                href="/group/create"
+              ) 
+                btn(class=" form-control btn btn-primary") + Tạo nhóm
+        .row
+        +box-head("Nhóm của bạn")
+      .inner-body 
+        .row
+          each group in groupChatList
+            .col-6 
+              .box-group
+                .box-avatar 
+                  img(src=(group.avatar || "/client/images/group-avatar.png"), alt="Ảnh nhóm")
+                .box-info
+                  .box-groupname #{group.title}
+                  .box-groupbtn 
+                    a(href=`/chat/${group._id}` class="btn btn-primary") Nhắn tin

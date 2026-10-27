@@ -1,15 +1,27 @@
 const User = require('../model/user.model');
+const RoomChat = require('../model/room-chat.model');
 const friendSocket = require("../socket/friend.socket");
 
 // [GET] /friend
 module.exports.index = async (req, res) => {
   const myUser = res.locals.myUser;
   const friendIds = myUser.friendsList.map((friend) => friend.user_id);
-  console.log(friendIds);
+  // console.log(friendIds);
   let friendsList = await User.find({
     _id: {$in : friendIds}
   }).select("-password -tokenUser");
-  console.log(friendsList);
+
+  for(const friend of friendsList){
+    // console.log(friend);
+    const roomChat = await RoomChat.findOne({
+      "users.user_id": {
+        $all: [myUser.id, friend.id]
+      }
+    }).select("id");
+    friend.roomChatId = roomChat.id
+    // console.log(friend.roomChatId);
+  }
+  // console.log(friendsList);
   res.render("client/pages/friend/index.pug", {
     pageTitle: "Trang danh sách bạn bè",
     friendsList: friendsList

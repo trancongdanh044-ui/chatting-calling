@@ -1,5 +1,6 @@
 const User = require('../model/user.model');
 const sizeAlert = require('../helper/size-alert');
+const RoomChat = require('../model/room-chat.model');
 
 module.exports = async (req, res) => {
   const myUser = res.locals.myUser;
@@ -40,7 +41,6 @@ module.exports = async (req, res) => {
 
       sizeAlert.lengthOfInviation(reqUserId, socket);
     });
-
 
     // Tính năng huỷ yêu kết bạn
     socket.on("CLIENT_CANCEL_REQUEST", async (data) => {
@@ -151,6 +151,32 @@ module.exports = async (req, res) => {
       const userId = data.userId; // userBId - người gửi yêu cầu kết bạn
 
       // Thêm B vào friendsList của A và xoá B khỏi invitationFriends của A
+      const userAInB = await User.findOne({
+        _id: myUserId,
+        invitationFriends: userId
+      });
+
+      const userBInA = await User.findOne({
+        _id: userId,
+        requestFriends: myUserId
+      });
+      let roomChat;
+      if(userAInB && userBInA){
+        roomChat = new RoomChat({
+          typeRoom: "friend",
+          users:[
+            {
+              user_id: userId,
+              role: "superAdmin"
+            },
+            {
+              user_id: myUser.id,
+              role: "superAdmin"
+            }
+          ]
+        });
+        await roomChat.save();
+      }
       await User.updateOne({
         _id: myUserId,
         invitationFriends: userId,
@@ -161,7 +187,7 @@ module.exports = async (req, res) => {
         $push: {
           friendsList: {
             user_id: userId,
-            room_chat_id: ""
+            room_chat_id: roomChat.id
           }
         }
       });
@@ -176,7 +202,7 @@ module.exports = async (req, res) => {
         $push: {
           friendsList: {
             user_id: myUserId,
-            room_chat_id: ""
+            room_chat_id: roomChat.id
           }
         }
       });

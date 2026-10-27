@@ -1,10 +1,11 @@
-.chat(my-user-id=myUser.id)
+.chat(my-user-id=myUser.id my-user-name=myUser.fullName)
   .inner-head
     div(class="box-user")
       div(class="user-avatar")
-        img(src="", alt="")
+        img(src=myRoomChat.avatar, alt="")
+        div(class="box-user-status" statusOnline=myRoomChat.statusOnlineFriend) 
       div(class="user-info")
-        div(class="user-name") Lê Văn B 
+        div(class="user-name") #{myRoomChat.title}
         div(class="user-status") 
           span Hoạt động 4 giờ trước
     div(class="box-tool")
@@ -15,15 +16,26 @@
     each chat in chats 
       div(class=(chat.user_id == myUser.id ? "inner-outcoming" : "inner-incoming" ))
         if(chat.user_id != myUser.id)
-          .inner-name
-            | #{chat.fullName}
-        if(chat.content)
-          .inner-content 
-            | #{chat.content}
-        if(chat.images.length > 0)
-          .inner-images
-            each image in chat.images 
-              img(src=image, alt="Ảnh" width="250px" height="auto")
+          .inner-avatar
+            img(src=(chat.user_avatar || "/client/images/avatar.jpg"), alt="")
+          .inner-message
+            .inner-name
+              | #{chat.fullName}
+            if(chat.content)
+              .inner-content 
+                | #{chat.content}
+            if(chat.images.length > 0)
+              .inner-images
+                each image in chat.images 
+                  img(src=image, alt="Ảnh" width="250px" height="auto")
+        else
+          if(chat.content)
+            .inner-content 
+              | #{chat.content}
+          if(chat.images.length > 0)
+            .inner-images
+              each image in chat.images 
+                img(src=image, alt="Ảnh" width="250px" height="auto")
     //- div(class="inner-list-typing")
     //-   div(class="box-typing")
     //-     div(class="inner-name") Lê Văn A
@@ -31,6 +43,9 @@
     //-       span
     //-       span 
     //-       span
+    <div class="tooltip" role="tooltip" data-popper-placement="right">
+      <emoji-picker></emoji-picker>
+    </div>
   .inner-preview-images 
     div(class="custom-file-container" data-upload-id="upload-image")
   .inner-foot
