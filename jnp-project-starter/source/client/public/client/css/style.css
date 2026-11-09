@@ -191,7 +191,7 @@
  background: #ddd;
  margin-left: 5px;
  border-radius: 0px 20px 20px 0px;
- flex: 1;
+ width: 100%;
 }
 
 .menu .inner-menu .menu-search label{
@@ -216,6 +216,7 @@
   align-items: center;
   justify-content: center;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .menu .inner-menu .menu-feature .feature-item.active{
@@ -247,7 +248,7 @@
   position: relative;
 }
 
-.menu .inner-menu .menu-item .inner-item .box-avatar .box-status[statusOnline="online"]{
+.menu .inner-menu .menu-item .inner-item .box-avatar .box-status[status-online="online"]{
   position: absolute;
   width: 10px;
   height: 10px;
@@ -327,7 +328,7 @@
   position: relative;
 }
 
-.chat .inner-head .box-user .user-avatar .box-user-status[statusOnline="online"]{
+.chat .inner-head .box-user .user-avatar .box-user-status[status-online="online"]{
   position: absolute;
   width: 12px;
   height: 12px;
@@ -435,7 +436,7 @@
 /* Bạn đang dùng inner-conntent */
 .chat .inner-outcoming .inner-conntent {
   display: inline-block;
-  background: #FE5DA3;
+  background: #2563eb;
   color: #fff;
   padding: 8px 12px;
   border-radius: 15px;
@@ -448,7 +449,7 @@
    thì dùng đoạn này */
 .chat .inner-outcoming .inner-content {
   display: inline-block;
-  background: #FE5DA3;
+  background: #2563eb;
   color: #fff;
   padding: 8px 12px;
   border-radius: 15px;
@@ -482,8 +483,8 @@
 
 .chat .inner-form button {
   border-radius: 15px;
-  border: 1px solid #FE5DA3;
-  background: #FE5DA3;
+  border: 1px solid #2563eb;
+  background: #2563eb;
   color: #fff;
   height: 32px;
   padding: 0 10px;
@@ -507,8 +508,8 @@
 
 /* Hiệu ứng button */
 .chat .inner-form button:hover {
-  background: #e94b91;
-  border-color: #e94b91;
+  background: #2563eb;
+  border-color: #2563eb;
 }
 
 .chat .inner-preview-images{
@@ -528,7 +529,7 @@
 }
 
 .chat .inner-preview-images .image-preview{
-  height: auto;;
+  height: auto;
   padding: 0;
   border-radius: 0;
 }
@@ -543,8 +544,8 @@
 /* emoji-picker */
 .chat .inner-form .button-icon{
   border-radius: 15px;
-  border: 1px solid #FE5DA3;
-  background: #FE5DA3;
+  border: 1px solid #2563eb;
+  background: #2563eb;
   color: #fff;
   height: 32px;
   padding: 0 10px;
@@ -833,7 +834,7 @@
   opacity: 0;
 }
 
-.box-users .inner-status[status="online"]{
+.box-users .inner-status[status-online="online"]{
   opacity: 1;
 }
 /* End box-user */

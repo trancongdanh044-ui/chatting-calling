@@ -33,8 +33,11 @@ module.exports.create = async(req, res) =>{
 module.exports.createPost = async(req, res) =>{
   const myUser = res.locals.myUser;
   const groupName = req.body.groupName;
-  const members = req.body.members;
-  console.log(members);
+  const members = req.body.members || [];
+  if(typeof members === "string" || members.length < 2){
+    req.flash("error", "Chỉ cho phép tạo nhóm từ 3 người trở lên !");
+    return res.redirect(req.get("Referrer" || "/chat"));
+  }
   let users = [];
   for(const id of members){
     users.push({

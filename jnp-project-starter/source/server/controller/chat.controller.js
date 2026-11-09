@@ -2,79 +2,102 @@ const Chat = require('../model/chat.model');
 const User = require('../model/user.model');
 const RoomChat = require('../model/room-chat.model.js');
 const chatSocket = require('../socket/chat.socket');
+const timeHelper = require('../helper/time.js');
+const roomChatHepler = require('../helper/room-chat.js');
+const searchHelper = require('../helper/search.js');
 
+// [GET] /chat
 module.exports.index = async (req, res) => {
-  // Chat socket
-  chatSocket(req, res);
-  // Chat socket
+  try {
+    // Room Chat List
+    const myUser = res.locals.myUser;
+    let roomChatList = await roomChatHepler.getRoomChatList(myUser);
+    // End Room Chat List
 
-  const roomChatId = req.params.roomChatId;
-  // console.log(roomChatId);
-  // Room Chat List
-  const myUser = res.locals.myUser;
-  const roomChatList = await RoomChat.find({
-    deleted: false,
-    "users.user_id": myUser.id
-  });
-  // console.log(roomChatList);
+    // Search
+    if (req.query) {
+      const keyword = req.query.keyword;
+      roomChatList = searchHelper.searchRoomChatByTitle(keyword, roomChatList);
+    }
+    // End Search
 
-  for (const roomChat of roomChatList) {
-    if (roomChat.typeRoom === "friend") {
-      const friendId = roomChat.users.find(user => user.user_id != myUser.id)?.user_id;
+    res.render("client/pages/chat/index.pug", {
+      pageTitle: "Hãy bắt đầu trò chuyện",
+      roomChatList: roomChatList
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// [GET] /chat/:roomChatId
+module.exports.detail = async (req, res) => {
+  try {
+    // Chat socket
+    chatSocket(req, res);
+    // End chat socket
+
+    // Room Chat List
+    const myUser = res.locals.myUser;
+    let roomChatList = await roomChatHepler.getRoomChatList(myUser);
+    // End Room Chat List
+
+    // Search
+    // Search by title
+    if (req.query.keyword) {
+      const keyword = req.query.keyword;
+      roomChatList = searchHelper.searchRoomChatByTitle(keyword, roomChatList);
+    }
+    // End search by title
+    // End Search
+
+    const roomChatId = req.params.roomChatId;
+    // Lấy ra Room Chat theo id
+    const myRoomChat = await RoomChat.findOne({
+      _id: roomChatId,
+      deleted: false
+    });
+
+    if (myRoomChat.typeRoom === "friend") {
+      const friendId = myRoomChat.users.find(user => user.user_id != myUser.id)?.user_id;
       const friend = await User.findOne({
         _id: friendId
       });
-      roomChat.avatar = friend.avatar || "/client/images/avatar.jpg"
-      roomChat.title = friend.fullName;
-      roomChat.statusOnlineFriend = friend.statusOnline;
-    } else if (roomChat.typeRoom === "group") {
-      if (!roomChat.avatar) {
-        roomChat.avatar = "/client/images/group-avatar.png"
+      myRoomChat.avatar = friend.avatar || "/client/images/avatar.jpg"
+      myRoomChat.title = friend.fullName;
+      myRoomChat.statusOnlineFriend = friend.statusOnline;
+      myRoomChat.friendId = friendId;
+      myRoomChat.friendLastOnline = timeHelper.getLastActiveText(friend.lastOnlineAt);
+    } else if (myRoomChat.typeRoom === "group") {
+      if (!myRoomChat.avatar) {
+        myRoomChat.avatar = "/client/images/group-avatar.png"
       }
     }
-  }
-  // End Room Chat List
+    // Hết lấy ra Room Chat theo id
 
-  // Lấy ra Room Chat theo id
-  const myRoomChat = await RoomChat.findOne({
-    _id: roomChatId,
-    deleted: false
-  });
-
-  if (myRoomChat.typeRoom === "friend") {
-    const friendId = myRoomChat.users.find(user => user.user_id != myUser.id)?.user_id;
-    const friend = await User.findOne({
-      _id: friendId
+    // Chat
+    let chats = await Chat.find({
+      deleted: false,
+      room_chat_id: roomChatId
     });
-    myRoomChat.avatar = friend.avatar || "/client/images/avatar.jpg"
-    myRoomChat.title = friend.fullName;
-    myRoomChat.statusOnlineFriend = friend.statusOnline;
-  } else if (myRoomChat.typeRoom === "group") {
-    if (!myRoomChat.avatar) {
-      myRoomChat.avatar = "/client/images/group-avatar.png"
+
+    // console.log(chats);
+    for (const chat of chats) {
+      const infoUser = await User.findOne({
+        _id: chat.user_id
+      }).select("fullName");
+      chat.fullName = infoUser.fullName;
     }
+    // End Chat
+
+    res.render("client/pages/chat/index.pug", {
+      pageTitle: myRoomChat.title,
+      roomChatList: roomChatList,
+      chats: chats,
+      myRoomChat: myRoomChat
+    });
+  } catch (error) {
+    console.log(error);
+    res.redirect("/chat");
   }
-  // Hết lấy ra Room Chat theo id
-
-  // Chat
-  let chats = await Chat.find({
-    deleted: false,
-    room_chat_id: roomChatId
-  });
-
-  // console.log(chats);
-  for (const chat of chats) {
-    const infoUser = await User.findOne({
-      _id: chat.user_id
-    }).select("fullName");
-    chat.fullName = infoUser.fullName;
-  }
-  // End Chat
-
-  res.render("client/pages/chat/index.pug", {
-    pageTitle: "Trang chủ",
-    roomChatList: roomChatList,
-    chats: chats,
-    myRoomChat: myRoomChat
-  });
 }

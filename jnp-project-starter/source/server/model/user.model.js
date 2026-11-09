@@ -7,11 +7,7 @@ const userSchema = new mongoose.Schema({
   password: String,
   phone: String,
   avatar: String,
-  tokenUser: {
-    type: String,
-    default: generateHelper.generateRandomString(20)
-  },
-  avatar: String,
+  tokenUser: String,
   friendsList: [{
     user_id: String,
     room_chat_id: String
@@ -27,7 +23,8 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  deletedAt: Date
+  deletedAt: Date,
+  lastOnlineAt: Date
 }, {
   timestamps: true,
 });
