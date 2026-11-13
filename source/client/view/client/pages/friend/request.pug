@@ -1,0 +1,24 @@
+extends ../../layouts/default.pug
+include ../../mixins/friend.pug
+
+//- Trang: Lời mời đã gửi  (dữ liệu từ friend.controller: requestFriends)
+block main
+  .page(data-page="request")
+    .page-head
+      h1 Lời mời đã gửi
+      +list-tools("Tìm theo tên...")
+    +friend-tabs("request")
+
+    //- Danh sách thẻ người dùng
+    .user-grid#user-grid(data-filter-list)
+      each u in requestFriends
+        +user-card(u, "request")
+
+    //- Hiện khi danh sách trống (friend.js tự bật/tắt khi có thay đổi)
+    .empty-state#empty-state(hidden=(requestFriends.length > 0))
+      i.fa-solid.fa-paper-plane
+      h3 Bạn chưa gửi lời mời nào
+      p Vào mục Gợi ý để kết bạn với mọi người.
+
+block script
+  script(src="/client/js/friend.js")

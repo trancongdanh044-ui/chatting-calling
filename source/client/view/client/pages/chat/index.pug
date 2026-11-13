@@ -1,0 +1,18 @@
+extends ../../layouts/default.pug
+
+//- =====================================================================
+//- Trang nhắn tin: dùng cho cả /chat (chưa chọn phòng) và /chat/:roomChatId
+//- Dữ liệu từ chat.controller: roomChatList, myRoomChat (có thể không có), chats
+//- 3 khối: danh sách hội thoại | khung chat | thông tin hội thoại
+//- =====================================================================
+block main
+  .chat-page(class=(myRoomChat ? "has-room" : ""))
+    include ../../partials/chat-list.pug
+    include ../../partials/chat-room.pug
+    if myRoomChat
+      include ../../partials/chat-info.pug
+
+block script
+  //- Bảng emoji (web component, tải từ CDN)
+  script(type="module", src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js")
+  script(src="/client/js/chat.js")

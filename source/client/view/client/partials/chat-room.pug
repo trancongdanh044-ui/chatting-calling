@@ -1,0 +1,81 @@
+//- =====================================================================
+//- chat-room.pug – KHUNG CHAT (giữa)
+//-   Thanh đầu (tên + nút gọi) → vùng tin nhắn → xem trước tệp → ô soạn tin
+//- Tin nhắn cũ được nhúng dạng JSON (#chat-data) rồi chat.js vẽ ra,
+//- nhờ vậy tin cũ và tin mới (realtime) dùng chung MỘT hàm vẽ.
+//- =====================================================================
+if myRoomChat
+  - var isFriendRoom = myRoomChat.typeRoom === "friend"
+  //- Chuẩn bị dữ liệu tin nhắn. Thay "<" bằng \u003c để không ai chèn được </script>
+  - var chatData = (chats || []).map(function (c) { return { id: c.id, userId: c.user_id, fullName: c.fullName, content: c.content || "", images: c.images || [], files: c.files || [], createdAt: c.createdAt }; })
+  script#chat-data(type="application/json")!= JSON.stringify(chatData).replace(/</g, "\\u003c")
+
+  //- data-*: thông tin phòng cho chat.js và call.js
+  section.room#room(
+    data-room-id=myRoomChat.id
+    data-room-type=myRoomChat.typeRoom
+    data-peer-id=(myRoomChat.friendId || "")
+    data-peer-name=myRoomChat.title
+    data-peer-avatar=myRoomChat.avatar
+    data-my-name=myUser.fullName
+    data-my-avatar=(myUser.avatar || "/client/images/avatar.jpg")
+  )
+    //- ----- Thanh đầu -----
+    header.room-head
+      a.icon-btn.back-btn(href="/chat", aria-label="Quay lại danh sách")
+        i.fa-solid.fa-arrow-left
+      .room-peer(data-friend-id=(myRoomChat.friendId || false))
+        .avatar
+          img(src=myRoomChat.avatar, alt=myRoomChat.title)
+          if isFriendRoom
+            span.status-dot(data-status=myRoomChat.statusOnlineFriend)
+        div
+          .peer-name #{myRoomChat.title}
+          if isFriendRoom
+            .peer-status(data-status-text) #{myRoomChat.statusOnlineFriend === "online" ? "Đang hoạt động" : myRoomChat.friendLastOnline}
+          else
+            .peer-status #{myRoomChat.users.length} thành viên
+      //- Gọi thoại / video call (chỉ cho chat 1-1) – logic ở call.js
+      button.icon-btn#btn-voice-call(type="button", title=(isFriendRoom ? "Gọi thoại" : "Chưa hỗ trợ gọi nhóm"), aria-label="Gọi thoại", disabled=!isFriendRoom)
+        i.fa-solid.fa-phone
+      button.icon-btn#btn-video-call(type="button", title=(isFriendRoom ? "Gọi video" : "Chưa hỗ trợ gọi nhóm"), aria-label="Gọi video", disabled=!isFriendRoom)
+        i.fa-solid.fa-video
+      button.icon-btn#btn-info(type="button", title="Thông tin hội thoại", aria-label="Thông tin hội thoại")
+        i.fa-solid.fa-circle-info
+
+    //- ----- Vùng tin nhắn (chat.js vẽ vào #messages) -----
+    .room-body#messages
+    button.new-msg-pill#new-msg-pill(type="button", hidden) Tin nhắn mới ↓
+
+    //- ----- Xem trước ảnh / tài liệu sắp gửi -----
+    .attach-preview#attach-preview
+
+    //- ----- Ô soạn tin: ảnh, tài liệu, emoji, gửi -----
+    form.composer#composer(autocomplete="off")
+      input#image-input(type="file", accept="image/*", multiple, hidden)
+      input#file-input(type="file", multiple, hidden)
+      button.icon-btn(type="button", data-pick="image", title="Gửi ảnh", aria-label="Gửi ảnh")
+        i.fa-solid.fa-image
+      button.icon-btn(type="button", data-pick="file", title="Gửi tài liệu", aria-label="Gửi tài liệu")
+        i.fa-solid.fa-paperclip
+      textarea#message-input(rows="1", placeholder="Nhập tin nhắn…  (Enter để gửi, Shift+Enter xuống dòng)", aria-label="Nội dung tin nhắn")
+      button.icon-btn#btn-emoji(type="button", title="Emoji", aria-label="Chọn emoji")
+        i.fa-solid.fa-face-smile
+      button.icon-btn.send-btn(type="submit", title="Gửi", aria-label="Gửi")
+        i.fa-solid.fa-paper-plane
+      .emoji-pop#emoji-pop(hidden)
+        emoji-picker
+
+    //- Lớp phủ khi kéo thả tệp vào khung chat
+    .drop-overlay#drop-overlay(hidden)
+      span
+        i.fa-solid.fa-cloud-arrow-up
+        |  Thả tệp để gửi
+else
+  //- Chưa chọn hội thoại nào (/chat)
+  section.room.room-empty
+    div
+      i.fa-regular.fa-comments
+      h2 Chọn một cuộc trò chuyện
+      p Hoặc bắt đầu cuộc trò chuyện mới với bạn bè của bạn.
+      a.btn.btn-primary(href="/friend", style="margin-top:12px") Xem bạn bè

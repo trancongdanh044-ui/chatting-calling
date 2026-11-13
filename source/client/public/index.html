@@ -1,0 +1,12 @@
+<!doctype html>
+<!-- Trang "/" : server không có route cho "/" (sau khi đăng ký sẽ redirect về "/").
+     File này chuyển thẳng về /chat; nếu chưa đăng nhập, server sẽ đưa tới trang đăng nhập. -->
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url=/chat">
+  <title>Đang chuyển trang…</title>
+  <script>location.replace("/chat");</script>
+</head>
+<body></body>
+</html>

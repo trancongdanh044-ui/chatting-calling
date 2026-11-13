@@ -1,0 +1,31 @@
+div(class="menu")
+  .inner-menu 
+    div(class="menu-name")
+      h2(class="name-detail") Đoạn chat 
+    div(class="menu-search")
+      label(for="search") <i class="fa-solid fa-magnifying-glass"></i> 
+      input(type="text" id="search" placeholder="Tìm kiếm" name="keyword" search-sider)
+    div(class="menu-feature")
+      div(class="feature-item active" filter="all") Tất cả
+      div(class="feature-item" filter="friend") Bạn bè
+      div(class="feature-item" filter="group") Nhóm
+    div(class="menu-item")
+      if(roomChatList.length > 0)
+        each roomChat in roomChatList
+          a(class="inner-item" href=`/chat/${roomChat.id}`)
+            div(class="box-avatar" my-friend-id=(roomChat.friendId || ""))
+              img(src=roomChat.avatar, alt="Avatar Chat")
+              div(class="box-status" status-online=roomChat.statusOnlineFriend)
+            div(class="box-info")
+              div(class="info-name") #{roomChat.title}
+              div(class="info-message")
+                if(roomChat.latestMessage.content)
+                  if(roomChat.latestMessage.user_id == myUser.id)
+                    span(class="message-brief") #{`Bạn: ${roomChat.latestMessage.content}`}
+                  else
+                    span(class="message-brief") #{`${roomChat.latestMessage.user_name}: ${roomChat.latestMessage.content}`}
+                else
+                  span(class="message-brief") Hãy bắt đầu trò chuyện
+                span(class="message-time") #{roomChat.latestUpdate}
+      else 
+        p Không có kết quả

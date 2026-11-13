@@ -1,0 +1,24 @@
+extends ../../layouts/default.pug
+include ../../mixins/friend.pug
+
+//- Trang: Danh sách bạn bè  (dữ liệu từ friend.controller: friendsList)
+block main
+  .page(data-page="friends")
+    .page-head
+      h1 Danh sách bạn bè
+      +list-tools("Tìm theo tên...")
+    +friend-tabs("friend")
+
+    //- Danh sách thẻ người dùng
+    .user-grid#user-grid(data-filter-list)
+      each u in friendsList
+        +user-card(u, "friend")
+
+    //- Hiện khi danh sách trống (friend.js tự bật/tắt khi có thay đổi)
+    .empty-state#empty-state(hidden=(friendsList.length > 0))
+      i.fa-solid.fa-user-group
+      h3 Chưa có bạn bè nào
+      p Hãy xem mục Gợi ý để tìm và kết bạn.
+
+block script
+  script(src="/client/js/friend.js")

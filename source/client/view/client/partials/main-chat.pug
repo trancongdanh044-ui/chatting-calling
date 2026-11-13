@@ -1,0 +1,201 @@
+if(myRoomChat)
+  .chat(my-user-id=myUser.id my-user-name=myUser.fullName)
+    .inner-head
+      div(class="box-user" my-friend-id=(myRoomChat.friendId || ""))
+        div(class="user-avatar")
+          img(src=myRoomChat.avatar, alt="")
+          div(class="box-user-status" status-online=myRoomChat.statusOnlineFriend) 
+        div(class="user-info")
+          div(class="user-name") #{myRoomChat.title}
+          div(class="user-status" user-status-box) 
+            if(myRoomChat.statusOnlineFriend === "online")
+              span Đang hoạt động
+            else 
+              span #{myRoomChat.friendLastOnline}
+      div(class="box-tool")
+        div(class="tool-item" call) <i class="fa-solid fa-phone"></i>
+        div(class="tool-item" video-call) <i class="fa-solid fa-video"></i>
+        div(class="tool-item" info) <i class="fa-solid fa-circle-info"></i>
+    .inner-body
+      each chat in chats 
+        div(class=(chat.user_id == myUser.id ? "inner-outcoming" : "inner-incoming" ))
+          if(chat.user_id != myUser.id)
+            .inner-avatar
+              img(src=(chat.user_avatar || "/client/images/avatar.jpg"), alt="")
+            .inner-message
+              .inner-name
+                | #{chat.fullName}
+              if(chat.content)
+                .inner-content 
+                  | #{chat.content}
+              if(chat.images.length > 0)
+                .inner-images
+                  each image in chat.images 
+                    img(src=image, alt="Ảnh" width="250px" height="auto")
+          else
+            if(chat.content)
+              .inner-content 
+                | #{chat.content}
+            if(chat.images.length > 0)
+              .inner-images
+                each image in chat.images 
+                  img(src=image, alt="Ảnh" width="250px" height="auto")
+      //- div(class="inner-list-typing")
+      //-   div(class="box-typing")
+      //-     div(class="inner-name") Lê Văn A
+      //-     div(class="inner-dots")
+      //-       span
+      //-       span 
+      //-       span
+      <div class="tooltip" role="tooltip" data-popper-placement="right">
+        <emoji-picker></emoji-picker>
+      </div>
+    .inner-preview-images 
+      div(class="custom-file-container" data-upload-id="upload-image")
+    .inner-foot
+      form(
+        class="inner-form"
+        action=""
+        method="POST"
+      )
+        input(
+          type="text"
+          placeholder="Nhập nội dung..."
+          name="content"
+        )
+        label(
+          for="file-upload-with-preview-upload-image" 
+          class="btn btn-primary mb-0 m-2"
+        ) 
+          i(class="fa-solid fa-image")
+        span(
+          class="button-icon"
+        )
+          i(class="fa-solid fa-face-smile")
+        button(
+          type="submit"
+        )
+          i.fa-solid.fa-paper-plane
+    - var isAdmin = members.some(m => m.id == myUser.id && m.role === "superAdmin")
+    - var themeColors = ["", "#fa3c4c", "#44bec7", "#ffc300", "#7646ff", "#e91e63", "#00a400"]
+    .chat-info-panel(data-room-id=myRoomChat.id, data-theme=(myRoomChat.theme || ""))
+      .info-header
+        img(src=myRoomChat.avatar, alt="")
+        .info-title #{myRoomChat.title}
+      .info-actions
+        if(myRoomChat.typeRoom !== "group")
+          .info-action
+            .info-action-icon
+              i.fa-solid.fa-user
+            span Trang cá nhân
+        .info-action
+          .info-action-icon
+            i.fa-solid.fa-bell
+          span Tắt thông báo
+        .info-action(info-search-btn)
+          .info-action-icon
+            i.fa-solid.fa-magnifying-glass
+          span Tìm kiếm
+      .info-search
+        input(type="text", placeholder="Tìm tin nhắn trong đoạn chat")
+      //- Thông tin về đoạn chat
+      .info-section
+        .info-section-title
+          span Thông tin về đoạn chat
+          i.fa-solid.fa-chevron-down
+        .info-section-body
+          if(myRoomChat.typeRoom === "group")
+            .info-row
+              span.info-label Tên nhóm
+              span.info-value #{myRoomChat.title}
+            .info-row
+              span.info-label Thành viên
+              span.info-value #{members.length} người
+            .info-row
+              span.info-label Ngày tạo
+              span.info-value #{createdAtText}
+          else
+            .info-row
+              span.info-label Email
+              span.info-value #{myRoomChat.friendEmail || "Chưa cập nhật"}
+            .info-row
+              span.info-label Số điện thoại
+              span.info-value #{myRoomChat.friendPhone || "Chưa cập nhật"}
+            .info-row
+              span.info-label Bắt đầu trò chuyện
+              span.info-value #{createdAtText}
+          .info-row
+            span.info-label Số tin nhắn
+            span.info-value #{chats.length}
+      //- Tùy chỉnh đoạn chat
+      .info-section
+        .info-section-title
+          span Tùy chỉnh đoạn chat
+          i.fa-solid.fa-chevron-down
+        .info-section-body
+          if(myRoomChat.typeRoom === "group")
+            .info-item(info-rename)
+              i.fa-solid.fa-pen
+              span Đổi tên đoạn chat
+            .info-item(info-change-avatar)
+              i.fa-solid.fa-image
+              span Thay đổi ảnh
+            input(type="file", accept="image/*", info-avatar-input, style="display:none")
+          .info-theme
+            .info-label Đổi chủ đề
+            .theme-list
+              each color in themeColors
+                .theme-dot(class=((myRoomChat.theme || "") === color ? "active" : ""), data-color=color, style="background:" + (color || "#2563eb"))
+      //- Thành viên (chỉ nhóm)
+      if(myRoomChat.typeRoom === "group")
+        .info-section
+          .info-section-title
+            span Thành viên trong đoạn chat
+            i.fa-solid.fa-chevron-down
+          .info-section-body
+            each member in members
+              .member-item
+                img(src=member.avatar, alt="")
+                .member-name #{member.fullName}
+                if(member.role === "superAdmin")
+                  .member-role Trưởng nhóm
+                else if(isAdmin && member.id != myUser.id)
+                  .member-remove(data-user-id=member.id, title="Xóa khỏi nhóm")
+                    i.fa-solid.fa-user-minus
+      //- File phương tiện
+      .info-section
+        .info-section-title
+          span #{myRoomChat.typeRoom === "group" ? "File phương tiện, file và liên kết" : "File phương tiện và file"}
+          i.fa-solid.fa-chevron-down
+        .info-section-body
+          if(mediaImages.length > 0)
+            .info-row
+              span.info-label Ảnh đã gửi
+              span.info-value #{mediaImages.length}
+            .info-media
+              each image in mediaImages
+                a(href=image, target="_blank")
+                  img(src=image, alt="Ảnh")
+          else
+            .info-empty Chưa có ảnh hoặc file nào được gửi
+      //- Quyền riêng tư và hỗ trợ
+      .info-section
+        .info-section-title
+          span Quyền riêng tư và hỗ trợ
+          i.fa-solid.fa-chevron-down
+        .info-section-body
+          .info-row
+            span.info-label Trạng thái
+            span.info-value Đang hoạt động
+          if(myRoomChat.typeRoom === "group")
+            each member in members
+              if(member.role === "superAdmin")
+                .info-row
+                  span.info-label Trưởng nhóm
+                  span.info-value #{member.fullName}
+            .info-item.danger(info-leave-group)
+              i.fa-solid.fa-right-from-bracket
+              span Rời khỏi nhóm
+else
+  .chat-empty
+    p Chưa chọn cuộc trò truyện nào

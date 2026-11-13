@@ -1,0 +1,24 @@
+extends ../../layouts/default.pug
+include ../../mixins/friend.pug
+
+//- Trang: Lời mời kết bạn  (dữ liệu từ friend.controller: invitationFriends)
+block main
+  .page(data-page="invitation")
+    .page-head
+      h1 Lời mời kết bạn
+      +list-tools("Tìm theo tên...")
+    +friend-tabs("invitation")
+
+    //- Danh sách thẻ người dùng
+    .user-grid#user-grid(data-filter-list)
+      each u in invitationFriends
+        +user-card(u, "invitation")
+
+    //- Hiện khi danh sách trống (friend.js tự bật/tắt khi có thay đổi)
+    .empty-state#empty-state(hidden=(invitationFriends.length > 0))
+      i.fa-solid.fa-user-plus
+      h3 Không có lời mời nào
+      p Khi ai đó gửi lời mời, bạn sẽ thấy ngay tại đây.
+
+block script
+  script(src="/client/js/friend.js")

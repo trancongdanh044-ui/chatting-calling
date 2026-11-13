@@ -1,0 +1,32 @@
+extends ../../layouts/default.pug
+include ../../mixins/friend.pug
+
+//- Trang: Nhóm của bạn  (dữ liệu từ group.controller: groupChatList)
+block main
+  .page(data-page="group")
+    .page-head
+      h1 Nhóm của bạn
+      .page-tools
+        +list-tools("Tìm nhóm...")
+        a.btn.btn-primary(href="/group/create")
+          i.fa-solid.fa-plus
+          | Tạo nhóm
+
+    .user-grid#user-grid(data-filter-list)
+      each group in groupChatList
+        .user-card.group-card(data-name=group.title)
+          .avatar
+            img(src=(group.avatar || "/client/images/group-avatar.png"), alt=group.title)
+          .user-info
+            .user-name.truncate #{group.title}
+            .user-sub #{group.users.length} thành viên
+            .user-actions
+              a.btn.btn-primary.btn-sm(href=`/chat/${group.id}`)
+                i.fa-solid.fa-comment
+                | Nhắn tin
+
+    .empty-state(hidden=(groupChatList.length > 0))
+      i.fa-solid.fa-users
+      h3 Bạn chưa tham gia nhóm nào
+      p Tạo nhóm mới để trò chuyện cùng nhiều bạn bè.
+      a.btn.btn-primary(href="/group/create") Tạo nhóm đầu tiên

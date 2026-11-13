@@ -1,0 +1,24 @@
+extends ../../layouts/default.pug
+include ../../mixins/friend.pug
+
+//- Trang: Gợi ý kết bạn  (dữ liệu từ friend.controller: userHintList)
+block main
+  .page(data-page="hint")
+    .page-head
+      h1 Gợi ý kết bạn
+      +list-tools("Tìm theo tên...")
+    +friend-tabs("hint")
+
+    //- Danh sách thẻ người dùng
+    .user-grid#user-grid(data-filter-list)
+      each u in userHintList
+        +user-card(u, "hint")
+
+    //- Hiện khi danh sách trống (friend.js tự bật/tắt khi có thay đổi)
+    .empty-state#empty-state(hidden=(userHintList.length > 0))
+      i.fa-solid.fa-wand-magic-sparkles
+      h3 Chưa có gợi ý nào
+      p Khi có người dùng mới, họ sẽ xuất hiện ở đây.
+
+block script
+  script(src="/client/js/friend.js")

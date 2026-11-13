@@ -1,0 +1,36 @@
+//- =====================================================================
+//- sidebar-nav.pug – THANH ĐIỀU HƯỚNG TRÁI
+//- Mục nào có data-nav sẽ tự sáng lên khi URL bắt đầu bằng giá trị đó (ui.js)
+//- =====================================================================
+nav.rail
+  a.rail-logo(href="/chat", aria-label="Trang chủ")
+    img(src="/client/images/logo.png", alt="Logo")
+
+  .rail-links
+    a.rail-link(href="/chat", data-nav="/chat", title="Đoạn chat", aria-label="Đoạn chat")
+      i.fa-solid.fa-comment-dots
+    //- badge-invitation: số lời mời kết bạn, được cập nhật realtime
+    a.rail-link(href="/friend", data-nav="/friend", title="Bạn bè", aria-label="Bạn bè")
+      i.fa-solid.fa-user-group
+      span.badge(badge-invitation=myUser.id, hidden=(myUser.invitationFriends.length === 0)) #{myUser.invitationFriends.length}
+    a.rail-link(href="/group", data-nav="/group", title="Nhóm", aria-label="Nhóm")
+      i.fa-solid.fa-users
+    button.rail-link#btn-notify(type="button", title="Thông báo", aria-label="Thông báo")
+      i.fa-solid.fa-bell
+      span.badge(badge-invitation=myUser.id, hidden=(myUser.invitationFriends.length === 0)) #{myUser.invitationFriends.length}
+
+  .rail-spacer
+
+  button.rail-link(type="button", data-theme-toggle, title="Đổi giao diện sáng/tối", aria-label="Đổi giao diện sáng/tối")
+    i.fa-solid.fa-circle-half-stroke
+  button.rail-avatar(type="button", data-open-modal="account-modal", title=myUser.fullName, aria-label="Tài khoản")
+    img(src=(myUser.avatar || "/client/images/avatar.jpg"), alt=myUser.fullName)
+
+//- Hộp thông báo mở từ nút chuông
+#notify-popover.popover(hidden)
+  h3 Thông báo
+  a.popover-item(href="/friend/invitation")
+    i.fa-solid.fa-user-plus
+    span Lời mời kết bạn
+    span.badge(badge-invitation=myUser.id, hidden=(myUser.invitationFriends.length === 0)) #{myUser.invitationFriends.length}
+  p.muted(style="font-size:13px") Các thông báo khác (tin nhắn, cuộc gọi nhỡ…) sẽ hiện ở đây.

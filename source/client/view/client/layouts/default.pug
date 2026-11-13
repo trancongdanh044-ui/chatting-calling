@@ -1,0 +1,34 @@
+//- =====================================================================
+//- default.pug – KHUNG ỨNG DỤNG SAU KHI ĐĂNG NHẬP
+//-   [ thanh điều hướng trái ] [ nội dung trang: block main ]
+//-   + hộp thoại tài khoản + giao diện gọi video + toast + script chung
+//- =====================================================================
+- var appName = "Messenger Clone"
+doctype html
+html(lang="vi")
+  head
+    include ../partials/head.pug
+    link(rel="stylesheet", href="/client/css/layout.css")
+    link(rel="stylesheet", href="/client/css/friends.css")
+    link(rel="stylesheet", href="/client/css/chat.css")
+    link(rel="stylesheet", href="/client/css/call.css")
+  //- data-my-id: id người dùng hiện tại, các file JS đọc từ đây
+  body.app(data-my-id=myUser.id)
+    include ../partials/sidebar-nav.pug
+    main.app-main
+      block main
+
+    include ../partials/account-modal.pug
+    include ../partials/call-overlay.pug
+    include ../partials/flash.pug
+    #toast-area
+
+    //- Một kết nối Socket.IO duy nhất; server xác thực bằng cookie.
+    script(src="/socket.io/socket.io.js")
+    script(src="/client/js/config.js")
+    script(src="/client/js/socket.js")
+    //- Tiện ích chung: toast, theme, trạng thái online, badge lời mời
+    script(src="/client/js/ui.js")
+    //- Gọi thoại / video call (WebRTC) – dùng được ở mọi trang
+    script(src="/client/js/call.js")
+    block script

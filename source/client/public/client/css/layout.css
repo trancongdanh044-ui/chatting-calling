@@ -1,0 +1,69 @@
+/* =====================================================================
+   layout.css – KHUNG ỨNG DỤNG SAU KHI ĐĂNG NHẬP
+   [ Thanh điều hướng trái (rail) ] [ Nội dung trang (.app-main) ]
+   Trên điện thoại, thanh điều hướng chuyển xuống đáy màn hình.
+   ===================================================================== */
+body.app { display: flex; height: 100vh; height: 100dvh; overflow: hidden; }
+.app-main { flex: 1; min-width: 0; height: 100%; overflow-y: auto; }
+
+/* ----- Thanh điều hướng trái ----- */
+.rail {
+  width: var(--rail-w); flex: none; height: 100%;
+  display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px 0;
+  background: var(--surface); border-right: 1px solid var(--border);
+}
+.rail-logo img { width: 44px; height: 44px; border-radius: 50%; display: block; margin-bottom: 10px; }
+.rail-links { display: flex; flex-direction: column; gap: 6px; }
+.rail-spacer { flex: 1; }
+.rail-link {
+  position: relative; width: 48px; height: 48px; display: grid; place-items: center;
+  border: 0; border-radius: 14px; background: transparent; color: var(--text-2); font-size: 20px;
+  transition: background .15s, color .15s;
+}
+.rail-link:hover { background: var(--surface-2); color: var(--text); }
+.rail-link.active { background: var(--accent-soft); color: var(--accent); }
+.rail-link .badge { position: absolute; top: 4px; right: 3px; }
+.rail-avatar { padding: 0; border: 2px solid transparent; border-radius: 50%; background: none; }
+.rail-avatar img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; display: block; }
+.rail-avatar:hover { border-color: var(--accent); }
+
+/* Hộp thông báo (popover) mở từ chuông */
+.popover {
+  position: fixed; left: calc(var(--rail-w) + 8px); top: 130px; z-index: 1500;
+  width: 300px; padding: 14px; display: grid; gap: 10px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.popover h3 { font-size: 16px; }
+.popover-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: var(--radius-sm); color: var(--text); background: var(--surface-2); }
+.popover-item i { color: var(--accent); }
+.popover-item .badge { margin-left: auto; }
+
+/* ----- Nội dung trang (bạn bè, nhóm) dùng khung này ----- */
+.page { max-width: 1000px; margin: 0 auto; padding: 28px 24px 40px; display: grid; gap: 20px; }
+.page-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.page-head h1 { font-size: 26px; }
+.page-tools { display: flex; gap: 10px; flex-wrap: wrap; }
+.page-tools .search-box { min-width: 240px; }
+.select { padding: 10px 14px; border: 0; border-radius: 999px; background: var(--surface-2); }
+
+/* Tab chuyển giữa các trang Bạn bè / Gợi ý / Đã gửi / Lời mời */
+.tabs { display: flex; gap: 6px; padding: 5px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; overflow-x: auto; }
+.tab { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; color: var(--text-2); font-weight: 600; font-size: 14px; white-space: nowrap; }
+.tab:hover { color: var(--text); }
+.tab.active { background: var(--accent-soft); color: var(--accent); }
+
+/* Trạng thái rỗng ("chưa có gì") */
+.empty-state { text-align: center; display: grid; gap: 10px; justify-items: center; padding: 56px 16px; color: var(--text-2); }
+.empty-state i { font-size: 44px; color: var(--accent); opacity: .5; }
+.empty-state h3 { color: var(--text); }
+
+/* ----- Điện thoại: thanh điều hướng xuống đáy ----- */
+@media (max-width: 820px) {
+  body.app { flex-direction: column-reverse; }
+  .rail { width: 100%; height: 62px; flex-direction: row; justify-content: space-around; padding: 0 8px; border-right: 0; border-top: 1px solid var(--border); }
+  .rail-logo, .rail-spacer { display: none; }
+  .rail-links { flex-direction: row; gap: 2px; }
+  .rail-link { width: 46px; height: 46px; }
+  .popover { left: 12px; right: 12px; top: auto; bottom: 74px; width: auto; }
+  .page { padding: 18px 14px 28px; }
+}

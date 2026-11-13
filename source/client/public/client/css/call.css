@@ -1,0 +1,43 @@
+/* =====================================================================
+   call.css – GIAO DIỆN GỌI THOẠI / VIDEO CALL (WebRTC)
+   Gồm 2 phần:  .call-incoming  (hộp "có cuộc gọi đến")
+                .call-window    (màn hình đang gọi, toàn màn hình)
+   ===================================================================== */
+.call-incoming {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 2800;
+  width: min(92vw, 360px); padding: 22px; display: grid; justify-items: center; gap: 14px; text-align: center;
+  background: var(--surface); border-radius: 22px; box-shadow: var(--shadow); border: 1px solid var(--border);
+  animation: pop-in .2s ease;
+}
+.call-incoming .avatar { width: 84px; height: 84px; }
+.call-incoming .avatar::after { /* vòng sóng khi đổ chuông */
+  content: ""; position: absolute; inset: 0; border-radius: 50%; border: 3px solid var(--accent); animation: ring 1.4s infinite;
+}
+@keyframes ring { to { transform: scale(1.5); opacity: 0; } }
+.call-incoming h3 { font-size: 19px; }
+.call-btns { display: flex; gap: 22px; }
+
+/* Nút tròn lớn: nghe (xanh) / từ chối, tắt máy (đỏ) */
+.round-btn { width: 56px; height: 56px; border: 0; border-radius: 50%; display: grid; place-items: center; font-size: 21px; color: #fff; background: rgba(255,255,255,.18); transition: transform .12s, background .15s; }
+.round-btn:hover { background: rgba(255,255,255,.3); }
+.round-btn:active { transform: scale(.94); }
+.round-btn.off { background: #fff; color: #111; }       /* đang tắt mic / camera */
+.round-btn.on { background: var(--accent); }            /* đang chia sẻ màn hình */
+.round-btn.accept { background: var(--success); }
+.round-btn.hangup { background: var(--danger); }
+
+/* ----- Màn hình cuộc gọi ----- */
+.call-window { position: fixed; inset: 0; z-index: 2700; background: #0b0d14; color: #fff; display: grid; }
+.call-window video { grid-area: 1 / 1; width: 100%; height: 100%; object-fit: cover; background: #0b0d14; }
+.call-peer { grid-area: 1 / 1; display: grid; place-content: center; justify-items: center; gap: 12px; text-align: center; pointer-events: none; }
+.call-peer img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; }
+.call-peer h2 { font-size: 24px; }
+.call-window.has-remote .call-peer { display: none; }   /* có video đối phương thì ẩn avatar */
+.call-top { position: absolute; top: 16px; left: 16px; display: flex; gap: 8px; align-items: center; }
+.call-chip { padding: 6px 14px; border-radius: 999px; background: rgba(0,0,0,.5); font-size: 13px; font-weight: 600; backdrop-filter: blur(6px); }
+.call-chip.demo { background: var(--warning); color: #111; }
+/* Khung video của chính mình (góc phải dưới) */
+#local-video { grid-area: 1 / 1; justify-self: end; align-self: end; width: 150px; height: 200px; margin: 0 16px 120px 0; border-radius: 14px; border: 2px solid rgba(255,255,255,.4); transform: scaleX(-1); box-shadow: 0 6px 20px rgba(0,0,0,.5); z-index: 2; }
+.call-window.audio-only #local-video, .call-window.audio-only #remote-video { display: none; }
+.call-controls { position: absolute; left: 0; right: 0; bottom: 28px; display: flex; justify-content: center; gap: 16px; z-index: 3; }
+@media (max-width: 600px) { #local-video { width: 100px; height: 140px; margin-bottom: 110px; } }

@@ -1,0 +1,50 @@
+extends ../../layouts/default.pug
+include ../../mixins/friend.pug
+
+//- Trang: Tạo nhóm  (dữ liệu từ group.controller: friendsList)
+//- Form gửi POST /group/create với: groupName, members (nhiều checkbox)
+//- Backend yêu cầu chọn ít nhất 2 bạn (nhóm từ 3 người) – group-create.js kiểm tra trước khi gửi
+block main
+  .page(data-page="group-create")
+    .page-head
+      h1 Tạo nhóm
+      a.btn(href="/group")
+        i.fa-solid.fa-arrow-left
+        | Quay lại
+
+    if friendsList.length === 0
+      .empty-state
+        i.fa-solid.fa-user-group
+        h3 Bạn chưa có bạn bè nào
+        p Cần có ít nhất 2 người bạn để tạo nhóm.
+        a.btn.btn-primary(href="/friend/hint") Tìm bạn bè
+    else
+      form.group-form#group-form(action="/group/create", method="POST", data-submit-lock)
+        .field
+          label(for="groupName") Tên nhóm
+          input.input#groupName(type="text", name="groupName", placeholder="Ví dụ: Lớp Lập trình mạng", maxlength="60", autocomplete="off")
+
+        .field
+          label Thành viên đã chọn (<span id="pick-count">0</span>)
+          .picked#picked
+            span.muted#picked-hint Chưa chọn ai
+          .field-error#group-error
+
+        .search-box
+          i.fa-solid.fa-magnifying-glass
+          input.input(type="search", data-filter-input, placeholder="Tìm bạn bè theo tên...", aria-label="Tìm bạn bè")
+
+        .pick-list(data-filter-list)
+          each friend in friendsList
+            label.pick-item(data-name=friend.fullName)
+              input(type="checkbox", name="members", value=friend.id)
+              .avatar
+                img(src=(friend.avatar || "/client/images/avatar.jpg"), alt=friend.fullName)
+              span.user-name #{friend.fullName}
+
+        .form-foot
+          span.muted Cần chọn ít nhất 2 bạn
+          button.btn.btn-primary#group-submit(type="submit") Tạo nhóm
+
+block script
+  script(src="/client/js/group-create.js")
