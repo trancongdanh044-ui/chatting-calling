@@ -1,0 +1,40 @@
+extends ../../layouts/auth.pug
+
+//- Trang đăng nhập → POST /auth/login (email, password)
+block form
+  div
+    h1 Chào mừng trở lại 👋
+    p.muted Đăng nhập để tiếp tục trò chuyện.
+
+  form(action="/auth/login", method="POST", data-submit-lock)
+    .field
+      label(for="email") Email
+      input.input#email(type="email", name="email", placeholder="ban@example.com", autocomplete="email", required)
+    .field
+      label(for="password") Mật khẩu
+      .input-wrap
+        input.input#password(type="password", name="password", placeholder="Nhập mật khẩu", autocomplete="current-password", required)
+        button.icon-btn(type="button", data-toggle-password, aria-label="Hiện/ẩn mật khẩu")
+          i.fa-solid.fa-eye
+    .auth-links
+      span
+      button.btn-link(type="button", data-open-modal="forgot-modal", style="border:0;background:none;color:var(--accent);font-weight:600") Quên mật khẩu?
+    button.btn.btn-primary.btn-block(type="submit") Đăng nhập
+
+  p.auth-switch
+    | Chưa có tài khoản? 
+    a(href="/auth/sign-up") Đăng ký ngay
+
+  //- Hộp thoại quên mật khẩu (CHƯA CÓ BACKEND: chỉ là giao diện)
+  #forgot-modal.modal(hidden)
+    .modal-card
+      .modal-head
+        h2 Quên mật khẩu
+        button.icon-btn(type="button", data-close-modal, aria-label="Đóng")
+          i.fa-solid.fa-xmark
+      p.muted Nhập email đã đăng ký, chúng tôi sẽ gửi liên kết đặt lại mật khẩu.
+      form(data-demo-form="Quên mật khẩu")
+        .field
+          label(for="forgot-email") Email
+          input.input#forgot-email(type="email", placeholder="ban@example.com", required)
+        button.btn.btn-primary.btn-block(type="submit", style="margin-top:16px") Gửi liên kết

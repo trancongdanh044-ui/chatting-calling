@@ -1,0 +1,44 @@
+//- =====================================================================
+//- auth.pug – KHUNG TRANG ĐĂNG NHẬP / ĐĂNG KÝ (chưa đăng nhập)
+//- Trang con chỉ cần điền vào "block form" (phần form bên phải)
+//- =====================================================================
+- var appName = "Messenger Clone"
+doctype html
+html(lang="vi")
+  head
+    include ../partials/head.pug
+    link(rel="stylesheet", href="/client/css/auth.css")
+  body
+    .auth-page
+      //- Cột trái: giới thiệu ứng dụng
+      aside.auth-brand
+        .auth-logo
+          img(src="/client/images/logo.png", alt="Logo")
+          span #{appName}
+        h2 Kết nối mọi người, mọi lúc, mọi nơi.
+        ul.auth-features
+          li
+            i.fa-solid.fa-comments
+            span Nhắn tin theo thời gian thực
+          li
+            i.fa-solid.fa-paperclip
+            span Gửi ảnh và tài liệu dễ dàng
+          li
+            i.fa-solid.fa-video
+            span Gọi thoại, gọi video chất lượng cao
+      //- Cột phải: form
+      main.auth-form-side
+        button.icon-btn.auth-theme-btn(type="button", data-theme-toggle, aria-label="Đổi giao diện sáng/tối")
+          i.fa-solid.fa-circle-half-stroke
+        .auth-card
+          block form
+
+    //- Thông báo (flash) từ server: ui.js đọc và hiển thị dạng toast
+    include ../partials/flash.pug
+    #toast-area
+
+    //- Socket ở trang xác thực dùng để nhận trạng thái realtime; server sẽ gắn danh tính sau đăng nhập.
+    script(src="/socket.io/socket.io.js")
+    script(src="/client/js/socket.js")
+    script(src="/client/js/ui.js")
+    block script

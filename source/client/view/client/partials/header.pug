@@ -1,0 +1,34 @@
+header.header 
+  .container 
+    .row.align-item-center 
+      .col-3
+        .inner-logo
+          a(href="/")
+            img(src="/client/images/logo.png" alt="Logo")
+      .col-6
+        .inner-menu 
+          ul 
+            li 
+              a(href="/chat" title="Trang chủ") 
+                <i class="fa-solid fa-house"></i>
+              //- Trang chủ
+            li 
+              a(href="/friend" title="Bạn bè") 
+                <i class="fa-solid fa-user-group"></i> 
+              //- Bạn bè
+            li  
+              a(href="/group" title="Nhóm") 
+                <i class="fa-solid fa-users-line"></i> 
+              //- Nhóm
+            li 
+              a(href="/notification" title="Thông báo") 
+                <i class="fa-solid fa-bell"></i>
+                span(class="badge badge-sm badge-danger") 1 
+              //- Thông báo
+      .col-3
+        .inner-profile
+          ul
+            li 
+              a(href="/user/profile" title="Thông tin cá nhân")
+                  h3 #{myUser.fullName}
+                  img(src=(myUser.avatar ? myUser.avatar : "/client/images/avatar.jpg") alt="avatar")

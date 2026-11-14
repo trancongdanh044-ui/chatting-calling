@@ -1,0 +1,7 @@
+//- Chuyển flash message của express-flash sang thuộc tính data-*
+//- để ui.js hiển thị thành toast. (messages do express-flash cung cấp)
+#flash-data(
+  hidden
+  data-success=(messages && messages.success ? messages.success : "")
+  data-error=(messages && messages.error ? messages.error : "")
+)

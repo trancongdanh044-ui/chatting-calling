@@ -1,0 +1,73 @@
+//- =====================================================================
+//- friend.pug – CÁC MIXIN DÙNG CHUNG CHO CÁC TRANG BẠN BÈ
+//-   +friend-tabs("hint")     : thanh tab chuyển trang
+//-   +user-card(user, "hint") : thẻ người dùng, kind = friend | hint | request | invitation
+//- Lưu ý: friend.js có hàm createUserCard() tạo thẻ giống hệt cho dữ liệu realtime.
+//-         Nếu sửa HTML thẻ ở đây thì sửa cả bên đó.
+//- =====================================================================
+
+//- Thanh tab. active = friend | hint | request | invitation
+mixin friend-tabs(active)
+  nav.tabs
+    a.tab(href="/friend", class=(active === "friend" ? "active" : ""))
+      i.fa-solid.fa-user-group
+      | Bạn bè
+    a.tab(href="/friend/hint", class=(active === "hint" ? "active" : ""))
+      i.fa-solid.fa-wand-magic-sparkles
+      | Gợi ý
+    a.tab(href="/friend/request", class=(active === "request" ? "active" : ""))
+      i.fa-solid.fa-paper-plane
+      | Đã gửi
+    a.tab(href="/friend/invitation", class=(active === "invitation" ? "active" : ""))
+      i.fa-solid.fa-user-plus
+      | Lời mời
+      span.badge(badge-invitation=myUser.id, hidden=(myUser.invitationFriends.length === 0)) #{myUser.invitationFriends.length}
+
+//- Ô tìm kiếm + sắp xếp (lọc ngay trên trình duyệt, xem ui.js)
+mixin list-tools(placeholder)
+  .page-tools
+    .search-box
+      i.fa-solid.fa-magnifying-glass
+      input.input(type="search", data-filter-input, placeholder=placeholder, aria-label=placeholder)
+    select.select(data-sort-select, aria-label="Sắp xếp")
+      option(value="asc") Tên A → Z
+      option(value="desc") Tên Z → A
+
+//- Thẻ người dùng
+mixin user-card(u, kind)
+  .user-card(
+    data-user-id=u.id
+    data-name=u.fullName
+    data-friend-id=(kind === "friend" ? u.id : false)
+  )
+    .avatar
+      img(src=(u.avatar || "/client/images/avatar.jpg"), alt=u.fullName)
+      if kind === "friend"
+        span.status-dot(data-status=u.statusOnline)
+    .user-info
+      .user-name.truncate #{u.fullName}
+      if kind === "friend"
+        .user-sub(data-status-text) #{u.statusOnline === "online" ? "Đang hoạt động" : "Ngoại tuyến"}
+      .user-actions
+        case kind
+          when "friend"
+            a.btn.btn-primary.btn-sm(href=`/chat/${u.roomChatId}`)
+              i.fa-solid.fa-comment
+              | Nhắn tin
+            a.icon-btn(href=`/chat/${u.roomChatId}?call=audio`, title="Gọi thoại", aria-label="Gọi thoại")
+              i.fa-solid.fa-phone
+            a.icon-btn(href=`/chat/${u.roomChatId}?call=video`, title="Gọi video", aria-label="Gọi video")
+              i.fa-solid.fa-video
+          when "hint"
+            button.btn.btn-primary.btn-sm.when-idle(type="button", data-action="add") Thêm bạn bè
+            button.btn.btn-sm.when-idle(type="button", data-action="remove") Gỡ
+            span.muted.when-requested Đã gửi lời mời
+            button.btn.btn-sm.when-requested(type="button", data-action="cancel") Huỷ
+          when "request"
+            button.btn.btn-sm(type="button", data-action="revoke") Thu hồi
+          when "invitation"
+            button.btn.btn-primary.btn-sm.when-idle(type="button", data-action="accept") Chấp nhận
+            button.btn.btn-sm.when-idle(type="button", data-action="refuse") Từ chối
+            span.when-accepted
+              i.fa-solid.fa-check
+              |  Đã chấp nhận

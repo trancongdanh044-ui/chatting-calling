@@ -1,0 +1,42 @@
+/* =====================================================================
+   friends.css – CÁC TRANG BẠN BÈ, GỢI Ý, LỜI MỜI ĐÃ GỬI, LỜI MỜI NHẬN
+   và TRANG NHÓM (dùng chung kiểu thẻ người dùng .user-card)
+   ===================================================================== */
+.user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; }
+.user-card {
+  display: flex; align-items: center; gap: 14px; padding: 16px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  transition: box-shadow .15s, transform .15s;
+}
+.user-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+.user-card .avatar { width: 58px; height: 58px; }
+.user-card .status-dot { border-color: var(--surface); }
+.user-info { flex: 1; min-width: 0; display: grid; gap: 8px; }
+.user-name { font-weight: 700; }
+.user-sub { font-size: 13px; color: var(--text-2); margin-top: -6px; }
+.user-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+/* Nút đổi qua lại theo trạng thái của thẻ:
+   - Trang Gợi ý: .is-requested  (đã bấm "Thêm bạn bè")
+   - Trang Lời mời: .is-accepted (đã bấm "Chấp nhận")  */
+.when-requested, .when-accepted { display: none; }
+.user-card.is-requested .when-idle,
+.user-card.is-accepted .when-idle { display: none; }
+.user-card.is-requested .when-requested,
+.user-card.is-accepted .when-accepted { display: inline-flex; }
+.user-card.is-accepted { border-color: var(--success); }
+
+/* Ô thẻ nhóm */
+.group-card .avatar { width: 58px; height: 58px; }
+
+/* ---------- Trang tạo nhóm ---------- */
+.group-form { display: grid; gap: 18px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; }
+.picked { display: flex; flex-wrap: wrap; gap: 8px; min-height: 34px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 6px 5px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; }
+.chip button { border: 0; background: none; color: inherit; width: 20px; height: 20px; border-radius: 50%; }
+.pick-list { display: grid; gap: 4px; max-height: 340px; overflow-y: auto; }
+.pick-item { display: flex; align-items: center; gap: 12px; padding: 9px 10px; border-radius: var(--radius-sm); cursor: pointer; }
+.pick-item:hover { background: var(--surface-2); }
+.pick-item input { width: 18px; height: 18px; accent-color: var(--accent); }
+.pick-item .avatar { width: 38px; height: 38px; }
+.form-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }

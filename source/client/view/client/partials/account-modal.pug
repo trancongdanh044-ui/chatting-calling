@@ -1,0 +1,33 @@
+//- =====================================================================
+//- account-modal.pug – HỘP THOẠI TÀI KHOẢN: hồ sơ + giao diện + đăng xuất
+//- Mở bằng nút avatar ở thanh trái (data-open-modal="account-modal")
+//- =====================================================================
+#account-modal.modal(hidden)
+  .modal-card
+    .modal-head
+      h2 Tài khoản
+      button.icon-btn(type="button", data-close-modal, aria-label="Đóng")
+        i.fa-solid.fa-xmark
+    .info-profile
+      .avatar.lg
+        img(src=(myUser.avatar || "/client/images/avatar.jpg"), alt=myUser.fullName)
+      h2 #{myUser.fullName}
+      p.muted #{myUser.email}
+      p.muted #{myUser.phone}
+    //- Chức năng chưa có backend: data-demo sẽ hiện toast giải thích
+    button.btn.btn-soft.btn-block(type="button", data-demo="Chỉnh sửa hồ sơ")
+      i.fa-solid.fa-pen
+      | Chỉnh sửa hồ sơ
+    .field
+      label Giao diện
+      .segmented#theme-choice
+        button(type="button", data-theme-set="light") Sáng
+        button(type="button", data-theme-set="dark") Tối
+        button(type="button", data-theme-set="system") Hệ thống
+    //- Chỉ hiện khi videoCall = false (chế độ demo): xem thử giao diện "cuộc gọi đến"
+    button.btn.btn-soft.btn-block(type="button", data-demo-incoming, hidden)
+      i.fa-solid.fa-phone-volume
+      | Xem thử: cuộc gọi đến
+    a.btn.btn-danger.btn-block(href="/auth/logout")
+      i.fa-solid.fa-right-from-bracket
+      | Đăng xuất

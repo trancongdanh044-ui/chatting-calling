@@ -1,0 +1,39 @@
+//- =====================================================================
+//- call-overlay.pug – GIAO DIỆN GỌI THOẠI / VIDEO CALL
+//- Nằm sẵn trong layout, ẩn cho tới khi có cuộc gọi. Logic: js/call.js
+//-   1) #call-incoming : hộp "có cuộc gọi đến" (Trả lời / Từ chối)
+//-   2) #call-window   : màn hình cuộc gọi (video, nút mic/camera/chia sẻ/kết thúc)
+//- =====================================================================
+#call-incoming.call-incoming(hidden)
+  .avatar
+    img#incoming-avatar(src="/client/images/avatar.jpg", alt="")
+  div
+    h3#incoming-name
+    p.muted#incoming-type
+  .call-btns
+    button.round-btn.hangup#btn-reject(type="button", aria-label="Từ chối")
+      i.fa-solid.fa-phone-slash
+    button.round-btn.accept#btn-accept(type="button", aria-label="Trả lời")
+      i.fa-solid.fa-phone
+
+#call-window.call-window(hidden)
+  //- Video của đối phương (toàn màn hình) và của mình (khung nhỏ)
+  video#remote-video(autoplay, playsinline)
+  video#local-video(autoplay, playsinline, muted)
+  //- Hiện khi chưa có video đối phương (đang gọi, gọi thoại)
+  .call-peer
+    img#call-avatar(src="/client/images/avatar.jpg", alt="")
+    h2#call-name
+    p.muted#call-status Đang gọi…
+  .call-top
+    span.call-chip#call-timer(hidden) 00:00
+    span.call-chip.demo#call-demo-tag(hidden) DEMO – chưa có server tín hiệu
+  .call-controls
+    button.round-btn#btn-mic(type="button", aria-label="Bật/tắt micro")
+      i.fa-solid.fa-microphone
+    button.round-btn#btn-cam(type="button", aria-label="Bật/tắt camera")
+      i.fa-solid.fa-video
+    button.round-btn#btn-screen(type="button", aria-label="Chia sẻ màn hình")
+      i.fa-solid.fa-display
+    button.round-btn.hangup#btn-hangup(type="button", aria-label="Kết thúc cuộc gọi")
+      i.fa-solid.fa-phone-slash

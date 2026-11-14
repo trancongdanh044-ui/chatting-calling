@@ -1,0 +1,46 @@
+//- =====================================================================
+//- chat-list.pug – DANH SÁCH HỘI THOẠI (cột trái)
+//- Tìm kiếm và lọc Tất cả / Bạn bè / Nhóm chạy ngay trên trình duyệt (chat.js)
+//- =====================================================================
+aside.conv-panel
+  .conv-head
+    .conv-title
+      h1 Đoạn chat
+      a.icon-btn(href="/group/create", title="Tạo nhóm mới", aria-label="Tạo nhóm mới")
+        i.fa-solid.fa-pen-to-square
+    .search-box
+      i.fa-solid.fa-magnifying-glass
+      input.input#conv-search(type="search", placeholder="Tìm kiếm cuộc trò chuyện", aria-label="Tìm kiếm cuộc trò chuyện")
+    .filters#conv-filters
+      button.filter.active(type="button", data-filter="all") Tất cả
+      button.filter(type="button", data-filter="friend") Bạn bè
+      button.filter(type="button", data-filter="group") Nhóm
+
+  .conv-list#conv-list
+    each r in roomChatList
+      a.conv(
+        href=`/chat/${r.id}`
+        class=(myRoomChat && myRoomChat.id === r.id ? "active" : "")
+        data-type=r.typeRoom
+        data-title=r.title
+        data-friend-id=(r.friendId || false)
+      )
+        .avatar
+          img(src=r.avatar, alt=r.title)
+          if r.typeRoom === "friend"
+            span.status-dot(data-status=r.statusOnlineFriend)
+        .conv-body
+          .conv-name.truncate #{r.title}
+          .conv-row
+            //- Tin nhắn cuối: "Bạn: ..." hoặc "Tên: ..."
+            if r.latestMessage && r.latestMessage.content
+              span.conv-preview.truncate #{(r.latestMessage.user_id == myUser.id ? "Bạn" : r.latestMessage.user_name) + ": " + r.latestMessage.content}
+            else
+              span.conv-preview.truncate Hãy bắt đầu trò chuyện
+            time.conv-time(data-time=(r.updatedAt ? new Date(r.updatedAt).toISOString() : false))
+
+    //- Hiện khi không có hội thoại nào khớp tìm kiếm / bộ lọc
+    .conv-empty#conv-empty(hidden=(roomChatList.length > 0))
+      i.fa-regular.fa-comments(style="font-size:34px")
+      p Chưa có cuộc trò chuyện nào
+      a.btn.btn-soft.btn-sm(href="/friend/hint") Tìm bạn bè

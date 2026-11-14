@@ -1,0 +1,39 @@
+extends ../../layouts/auth.pug
+
+//- Trang đăng ký → POST /auth/sign-up (fullName, email, phone, password)
+//- Ô "Nhập lại mật khẩu" chỉ kiểm tra trên trình duyệt (auth.js), không gửi lên server
+block form
+  div
+    h1 Tạo tài khoản ✨
+    p.muted Chỉ mất một phút để bắt đầu.
+
+  form#signup-form(action="/auth/sign-up", method="POST", data-submit-lock)
+    .field
+      label(for="fullName") Họ và tên
+      input.input#fullName(type="text", name="fullName", placeholder="Nguyễn Văn A", autocomplete="name", required)
+    .field
+      label(for="email") Email
+      input.input#email(type="email", name="email", placeholder="ban@example.com", autocomplete="email", required)
+    .field
+      label(for="phone") Số điện thoại
+      input.input#phone(type="tel", name="phone", placeholder="0912345678", autocomplete="tel", required)
+    .field
+      label(for="password") Mật khẩu
+      .input-wrap
+        input.input#password(type="password", name="password", placeholder="Tối thiểu 6 ký tự", autocomplete="new-password", minlength="6", required)
+        button.icon-btn(type="button", data-toggle-password, aria-label="Hiện/ẩn mật khẩu")
+          i.fa-solid.fa-eye
+      .strength#strength(data-level="0")
+        span
+    .field
+      label(for="confirm") Nhập lại mật khẩu
+      input.input#confirm(type="password", placeholder="Nhập lại mật khẩu", autocomplete="new-password", required)
+      .field-error#confirm-error
+    button.btn.btn-primary.btn-block(type="submit") Đăng ký
+
+  p.auth-switch
+    | Đã có tài khoản? 
+    a(href="/auth/login") Đăng nhập
+
+block script
+  script(src="/client/js/auth.js")

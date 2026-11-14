@@ -1,0 +1,34 @@
+//- =====================================================================
+//- chat-info.pug – THÔNG TIN HỘI THOẠI (cột phải, bấm nút ⓘ để ẩn/hiện)
+//- Ảnh và tệp đã gửi được chat.js tự tổng hợp từ các tin nhắn đang có
+//- =====================================================================
+aside.info-panel#info-panel
+  .info-profile
+    .avatar
+      img(src=myRoomChat.avatar, alt=myRoomChat.title)
+    h2 #{myRoomChat.title}
+    if myRoomChat.typeRoom === "friend"
+      p.muted(data-status-text) #{myRoomChat.statusOnlineFriend === "online" ? "Đang hoạt động" : myRoomChat.friendLastOnline}
+    else
+      p.muted #{myRoomChat.users.length} thành viên
+
+  .info-actions
+    //- Tắt thông báo: lưu tạm trên trình duyệt (chưa có backend)
+    button#btn-mute(type="button")
+      span.icon-btn
+        i.fa-solid.fa-bell
+      | Thông báo
+    button(type="button", data-demo="Tìm trong cuộc trò chuyện")
+      span.icon-btn
+        i.fa-solid.fa-magnifying-glass
+      | Tìm kiếm
+
+  section.info-section
+    h3 Ảnh đã gửi
+    .media-grid#info-media
+    p.info-empty#info-media-empty Chưa có ảnh nào
+
+  section.info-section
+    h3 Tài liệu đã gửi
+    .info-files#info-files
+    p.info-empty#info-files-empty Chưa có tài liệu nào

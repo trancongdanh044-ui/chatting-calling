@@ -1,0 +1,31 @@
+//- =====================================================================
+//- group-call-overlay.pug – GIAO DIỆN GỌI NHÓM
+//- Nằm sẵn trong layout, ẩn cho tới khi có cuộc gọi nhóm. Logic: js/group-call.js
+//-   1) #gc-incoming : hộp "nhóm đang gọi" (Trả lời / Từ chối)
+//-   2) #gc-window   : lưới video các thành viên + nút micro/camera/rời cuộc gọi
+//- =====================================================================
+#gc-incoming.call-incoming(hidden)
+  .avatar
+    img#gc-incoming-avatar(src="/client/images/group-avatar.png", alt="")
+  div
+    h3#gc-incoming-name
+    p.muted#gc-incoming-type
+  .call-btns
+    button.round-btn.hangup#gc-reject(type="button", aria-label="Từ chối")
+      i.fa-solid.fa-phone-slash
+    button.round-btn.accept#gc-accept(type="button", aria-label="Tham gia")
+      i.fa-solid.fa-phone
+
+#gc-window.gc-window(hidden)
+  .gc-top
+    span.call-chip#gc-name
+    span.call-chip#gc-count
+    span.call-chip#gc-timer(hidden) 00:00
+  .gc-grid#gc-grid(data-count="0")
+  .gc-controls
+    button.round-btn#gc-mic(type="button", aria-label="Bật/tắt micro")
+      i.fa-solid.fa-microphone
+    button.round-btn#gc-cam(type="button", aria-label="Bật/tắt camera")
+      i.fa-solid.fa-video
+    button.round-btn.hangup#gc-hangup(type="button", aria-label="Rời cuộc gọi")
+      i.fa-solid.fa-phone-slash
