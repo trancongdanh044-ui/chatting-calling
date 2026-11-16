@@ -1,0 +1,138 @@
+/* pages/home - original styles. */
+
+.menu{
+  width: 29%;
+  position: fixed;
+  top: 100px;
+  left: 0px;
+  padding: 10px;
+  background-color: #ffffff;
+  border-right:solid 1px;
+  border-radius: 8px;
+  z-index: 1000;
+  height: auto;
+  max-height: calc(100% - 100px);
+}
+
+.menu .inner-menu{
+  display: flex;
+  flex-direction: column;
+}
+
+.menu .inner-menu .menu-name .name-detail{
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.menu .inner-menu .menu-search{
+  background-color: #ddd;
+  padding: 2px 2px;
+  border-radius: 20px;
+  display: flex;
+}
+
+.menu .inner-menu .menu-search input{
+ border: 0;
+ background: #ddd;
+ margin-left: 5px;
+ border-radius: 0px 20px 20px 0px;
+ width: 100%;
+}
+
+.menu .inner-menu .menu-search label{
+ margin-bottom: 0;
+ margin-left: 5px;
+}
+
+.menu .inner-menu .menu-feature{
+  display: flex;
+  justify-content: flex-start;
+  padding: 2px;
+  margin-top: 5px;
+}
+
+.menu .inner-menu .menu-feature .feature-item{
+  margin-left: 5px;
+  font-size: 16px;
+  border-radius: 20px;
+  width: 50px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.menu .inner-menu .menu-feature .feature-item.active{
+ background-color: #D2E1F1;
+}
+
+.menu .inner-menu .menu-item{
+ display: flex;
+ flex-direction: column;
+ padding: 5px;
+ height: auto;
+ max-height: 450px;
+ overflow-y: auto;
+}
+
+.menu .inner-menu .menu-item .inner-item{
+ display: flex;
+ justify-content: flex-start;
+ margin-bottom: 15px;
+ color: #000;
+}
+
+.menu .inner-menu .menu-item .inner-item:hover{
+ text-decoration: none;
+}
+
+.menu .inner-menu .menu-item .inner-item .box-avatar{
+  margin-right: 10px;
+  position: relative;
+}
+
+.menu .inner-menu .menu-item .inner-item .box-avatar .box-status[status-online="online"]{
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #00d800;
+  right: 5px;
+  bottom: 1px;
+  opacity: 1;
+}
+
+.menu .inner-menu .menu-item .inner-item .box-avatar img{
+  object-fit: contain;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+}
+
+.menu .inner-menu .menu-item .inner-item .box-info .info-name{
+ font-size: 16px;
+ font-weight: 600;
+}
+
+.menu .inner-menu .menu-item .inner-item .box-info .info-message{
+ flex: 1;
+}
+
+.menu .inner-menu .menu-item .inner-item .box-info .info-message .message-brief{
+ font-size: 14px;
+ margin-right: 2px;
+ overflow: hidden;
+}
+
+.menu .inner-menu .menu-item .inner-item .box-info .info-message .message-time{
+ font-size: 14px;
+}
+
+.main-row{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}

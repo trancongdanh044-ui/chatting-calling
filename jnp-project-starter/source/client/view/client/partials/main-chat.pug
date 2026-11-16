@@ -2,7 +2,7 @@ if(myRoomChat)
   .chat(my-user-id=myUser.id my-user-name=myUser.fullName)
     .inner-head
       div(class="box-user" my-friend-id=(myRoomChat.friendId || ""))
-        div(class="user-avatar")
+        a(class="user-avatar" href=`/profile/detail/${myRoomChat.friendId}`)
           img(src=myRoomChat.avatar, alt="")
           div(class="box-user-status" status-online=myRoomChat.statusOnlineFriend) 
         div(class="user-info")

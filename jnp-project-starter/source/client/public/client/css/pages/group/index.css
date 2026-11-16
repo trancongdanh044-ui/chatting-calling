@@ -1,0 +1,11 @@
+/* pages/group - Messenger theme and responsive styles. */
+
+body :is(.menu-item, .inner-body, .group-friends) {
+  scrollbar-width: thin;
+  scrollbar-color: #c9cbd0 transparent;
+}
+
+body .group-create .group-body {
+  border: 0;
+  box-shadow: none;
+}

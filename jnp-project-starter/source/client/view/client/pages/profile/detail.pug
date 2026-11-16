@@ -1,0 +1,49 @@
+extends ../../layouts/default.pug
+
+block main
+  .profile-page
+    .profile-shell
+      .profile-cover.has-image
+        img.profile-cover-image(src=(profileUser.cover || "/client/images/cover.png"), alt=`Ảnh bìa của ${profileUser.fullName}`)
+        .profile-cover-shade
+        a.profile-back(href="javascript:history.back()", aria-label="Quay lại")
+          i.fa-solid.fa-arrow-left
+
+      section.profile-card
+        .profile-avatar
+          img(src=(profileUser.avatar || "/client/images/avatar.jpg"), alt=profileUser.fullName)
+          span.profile-status(class=(profileUser.statusOnline === "online" ? "is-online" : ""), title=(profileUser.statusOnline === "online" ? "Đang hoạt động" : "Ngoại tuyến"))
+
+        .profile-heading
+          h1= profileUser.fullName
+          p.profile-presence
+            i.fa-solid.fa-circle
+            |  #{profileUser.statusOnline === "online" ? "Đang hoạt động" : "Ngoại tuyến"}
+          p.profile-intro= profileUser.selfIntro || "Chưa có lời giới thiệu."
+
+        .profile-actions
+          if isMe
+            a.btn.btn-primary(href="/profile/me/edit")
+              i.fa-solid.fa-pen
+              | Chỉnh sửa hồ sơ
+          else
+            a.btn.btn-primary(href=(profileUser.roomChatId ? `/chat/${profileUser.roomChatId}` : "/chat"))
+              i.fa-solid.fa-message
+              | Nhắn tin
+
+        .profile-divider
+
+        .profile-info
+          h2 Thông tin liên hệ
+          .profile-info-row
+            .profile-info-icon
+              i.fa-solid.fa-envelope
+            div
+              span Email
+              strong= profileUser.email || "Chưa cập nhật"
+          .profile-info-row
+            .profile-info-icon
+              i.fa-solid.fa-phone
+            div
+              span Số điện thoại
+              strong= profileUser.phone || "Chưa cập nhật"

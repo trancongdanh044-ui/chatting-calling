@@ -123,3 +123,88 @@ if (chatBody) {
   });
 }
 // End ViewerJS
+
+// Chat Info
+const infoPanel = document.querySelector('.main-row #info-panel');
+const infoToggle = document.querySelector('.chat .inner-head .box-tool [info]');
+
+if (infoPanel && infoToggle) {
+  const mainRow = infoPanel.closest('.main-row');
+  const messageBody = mainRow.querySelector('.chat .inner-body');
+  const mediaGrid = infoPanel.querySelector('#info-media');
+  const mediaEmpty = infoPanel.querySelector('#info-media-empty');
+  const closeInfo = document.createElement('button');
+  closeInfo.type = 'button';
+  closeInfo.className = 'info-close';
+  closeInfo.setAttribute('aria-label', 'Đóng thông tin cuộc trò chuyện');
+  closeInfo.innerHTML = '<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
+  infoPanel.prepend(closeInfo);
+  infoPanel.hidden = true;
+  infoPanel.setAttribute('aria-label', 'Thông tin cuộc trò chuyện');
+  infoToggle.setAttribute('role', 'button');
+  infoToggle.setAttribute('tabindex', '0');
+  infoToggle.setAttribute('aria-label', 'Thông tin cuộc trò chuyện');
+  infoToggle.setAttribute('aria-controls', infoPanel.id);
+  infoToggle.setAttribute('aria-expanded', 'false');
+
+  const updateInfoMedia = () => {
+    if (!mediaGrid || !messageBody) return;
+    const images = [...messageBody.querySelectorAll('.inner-images img')];
+    const uniqueImages = images.filter((image, index) =>
+      images.findIndex(item => item.src === image.src) === index
+    );
+    mediaGrid.replaceChildren();
+    uniqueImages.forEach((image, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'info-media-item';
+      button.setAttribute('aria-label', `Xem ảnh đã gửi ${index + 1}`);
+      const thumbnail = document.createElement('img');
+      thumbnail.src = image.src;
+      thumbnail.alt = image.alt || 'Ảnh đã gửi';
+      thumbnail.loading = 'lazy';
+      button.append(thumbnail);
+      button.addEventListener('click', () => image.click());
+      mediaGrid.append(button);
+    });
+    if (mediaEmpty) mediaEmpty.hidden = uniqueImages.length > 0;
+  };
+
+  const setInfoOpen = (open, returnFocus = false) => {
+    mainRow.classList.toggle('info-open', open);
+    infoPanel.hidden = !open;
+    infoToggle.setAttribute('aria-expanded', String(open));
+    if (open) {
+      updateInfoMedia();
+      closeInfo.focus();
+    } else if (returnFocus) {
+      infoToggle.focus();
+    }
+  };
+
+  infoToggle.addEventListener('click', () => setInfoOpen(infoPanel.hidden));
+  infoToggle.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      setInfoOpen(infoPanel.hidden);
+    }
+  });
+  closeInfo.addEventListener('click', () => setInfoOpen(false, true));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !infoPanel.hidden) setInfoOpen(false, true);
+  });
+  document.addEventListener('click', event => {
+    if (!infoPanel.hidden && window.matchMedia('(max-width: 1199px)').matches &&
+        !infoPanel.contains(event.target) && !infoToggle.contains(event.target)) {
+      setInfoOpen(false);
+    }
+  });
+
+  if (messageBody) {
+    new MutationObserver(() => {
+      if (!infoPanel.hidden) updateInfoMedia();
+    }).observe(messageBody, { childList: true, subtree: true, attributes: true, attributeFilter: ['src'] });
+  }
+}
+
+// End Chat Info

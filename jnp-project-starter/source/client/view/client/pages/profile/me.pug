@@ -1,0 +1,50 @@
+extends ../../layouts/default.pug
+
+block main
+  .profile-page
+    .profile-shell
+      .profile-cover.has-image
+        img.profile-cover-image(src=(myUser.cover || "/client/images/cover.png"), alt=`Ảnh bìa của ${myUser.fullName}`)
+        .profile-cover-shade
+        a.profile-back(href="/chat", aria-label="Quay lại trang trò chuyện")
+          i.fa-solid.fa-arrow-left
+
+      section.profile-card
+        .profile-avatar
+          img(src=(myUser.avatar || "/client/images/avatar.jpg"), alt=myUser.fullName)
+          span.profile-status(class=(myUser.statusOnline === "online" ? "is-online" : ""), title=(myUser.statusOnline === "online" ? "Đang hoạt động" : "Ngoại tuyến"))
+
+        .profile-heading
+          h1= myUser.fullName
+          p.profile-presence
+            i.fa-solid.fa-circle
+            |  #{myUser.statusOnline === "online" ? "Đang hoạt động" : "Ngoại tuyến"}
+          p.profile-intro= myUser.selfIntro || "Chưa có lời giới thiệu."
+
+        .profile-actions
+          a.btn.btn-primary(href="/profile/me/edit")
+            i.fa-solid.fa-pen
+            | Chỉnh sửa hồ sơ
+
+        .profile-divider
+
+        .profile-info
+          h2 Thông tin cá nhân
+          .profile-info-row
+            .profile-info-icon
+              i.fa-solid.fa-envelope
+            div
+              span Email
+              strong= myUser.email || "Chưa cập nhật"
+          .profile-info-row
+            .profile-info-icon
+              i.fa-solid.fa-phone
+            div
+              span Số điện thoại
+              strong= myUser.phone || "Chưa cập nhật"
+          .profile-info-row
+            .profile-info-icon
+              i.fa-solid.fa-user-group
+            div
+              span Bạn bè
+              strong #{myUser.friendsList ? myUser.friendsList.length : 0} người bạn

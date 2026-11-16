@@ -1,0 +1,114 @@
+/* common/header - original styles. */
+
+.header {
+  background: #ffffff;
+  padding: 12px 0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #eeeeee;
+  width: 100%;
+}
+
+.header .inner-logo{
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.header .inner-logo img {
+  display: block;
+  width: 60px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.25s ease;
+  border-radius: 50%;
+}
+
+.header .inner-logo img:hover {
+  transform: scale(1.04);
+}
+
+.header .inner-menu ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.header .inner-menu ul li {
+  margin: 0;
+  padding: 0;
+}
+
+.header .inner-menu ul li a {
+  display: block;
+  padding: 11px 12px;
+  color: #374151;
+  font-size: 24px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.header .inner-menu ul li a span {
+  position: absolute;
+  top: 10px;
+  right: 0px;
+  font-size: 10px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  padding: 1px 1px 0px 0px;
+}
+
+.header .inner-menu ul li a:hover {
+  color: #2563eb;
+  background: #ffffff;
+  /* box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2); */
+}
+
+.header .inner-profile{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.header .inner-profile ul{
+  list-style: none;  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header .inner-profile ul li a{
+  direction: flex;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.header .inner-profile ul li a h3{
+  font-size: 16px;
+  color: #2563eb;
+  font-weight: 500;
+  text-align: center;
+  margin-right: 10px;
+}
+
+.header .inner-profile ul li a img{
+  object-fit: contain;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: solid 1px #000;
+}

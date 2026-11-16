@@ -1,0 +1,119 @@
+/* common/header - Messenger theme and responsive styles. */
+
+body .header {
+  inset: 0 auto 0 0;
+  width: var(--rail-width);
+  height: 100dvh;
+  padding: 20px 10px;
+  background: var(--canvas);
+  border: 0;
+  box-shadow: none;
+  z-index: 1100;
+}
+
+body .header .container {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+
+body .header .container .row {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+body .header .container .row > :is(.col-3, .col-6) {
+  flex: 0 0 auto;
+  max-width: 100%;
+  width: 100%;
+  padding: 0;
+}
+
+body .header .container .row > .col-3:last-child {
+  margin-top: auto;
+}
+
+body .header .inner-logo {
+  display: flex;
+  justify-content: center;
+}
+
+body .header .inner-logo a img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border: 0;
+}
+
+body .header .inner-menu ul {
+  flex-direction: column;
+  gap: 12px;
+}
+
+body .header .inner-menu ul li a {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 14px;
+  color: #606369;
+  font-size: 21px;
+  transition: background .18s, color .18s;
+}
+
+body .header .inner-menu ul li a:hover {
+  background: #e6e8eb;
+  color: #080809;
+}
+
+body:has(.main-row) .header .inner-menu ul li a[href="/chat"],
+body:has(.friend, .hint-friend, .request-friend, .invite-friend) .header .inner-menu ul li a[href="/friend"],
+body:has(.group, .group-create) .header .inner-menu ul li a[href="/group"] {
+  color: var(--messenger-blue);
+  background: #e1ebff;
+}
+
+body .header .inner-menu ul li a span {
+  top: 3px;
+  right: 2px;
+  width: 17px;
+  height: 17px;
+  padding: 1px;
+  border: 2px solid var(--canvas);
+  font-size: 10px;
+}
+
+body .header .inner-profile,
+body .header .inner-profile ul {
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+body .header .inner-profile ul li a h3 {
+  display: none;
+}
+
+body .header .inner-profile ul li a img {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  object-fit: cover;
+  box-shadow: 0 0 0 3px #fff;
+}
+
+@media (max-width: 760px) {
+body .header {
+    padding: 16px 6px;
+  }
+
+body .header .inner-menu ul li a {
+    width: 42px;
+    height: 44px;
+  }
+}

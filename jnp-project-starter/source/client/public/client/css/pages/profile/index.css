@@ -1,0 +1,229 @@
+/* pages/profile - Messenger theme and responsive styles. */
+
+body .profile-page :is(.profile-shell, .profile-edit-shell) {
+  max-width: 880px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: white;
+  border-radius: 18px;
+}
+
+body .profile-page :is(.profile-cover, .profile-cover-editor) {
+  position: relative;
+  height: 240px;
+  background: #dce8fa;
+}
+
+body .profile-page :is(.profile-cover, .profile-cover-editor) .profile-cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+body .profile-page .profile-card {
+  position: relative;
+  padding: 0 32px 32px;
+}
+
+body .profile-page .profile-avatar {
+  position: relative;
+  width: 112px;
+  height: 112px;
+  margin-top: -44px;
+  border: 5px solid white;
+  border-radius: 50%;
+  background: white;
+}
+
+body .profile-page .profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+body .profile-page .profile-avatar .profile-status {
+  position: absolute;
+  right: 2px;
+  bottom: 4px;
+  width: 20px;
+  height: 20px;
+  border: 3px solid white;
+  border-radius: 50%;
+  background: #b0b3b8;
+}
+
+body .profile-page .profile-avatar .profile-status.is-online {
+  background: #31a24c;
+}
+
+body .profile-page .profile-heading h1,
+body .profile-page .profile-page-head h1 {
+  margin: 16px 0 8px;
+  font-size: 28px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+body .profile-page .profile-heading :is(.profile-presence, .profile-intro),
+body .profile-page .profile-page-head .muted {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+body .profile-page .profile-heading .profile-presence i {
+  font-size: 8px;
+}
+
+body .profile-page .profile-divider {
+  height: 1px;
+  margin: 24px 0;
+  background: var(--line);
+}
+
+body .profile-page .profile-info h2 {
+  font-size: 20px;
+  font-weight: 650;
+}
+
+body .profile-page .profile-info .profile-info-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+}
+
+body .profile-page .profile-info .profile-info-row .profile-info-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #f0f2f5;
+  color: var(--muted);
+}
+
+body .profile-page .profile-info .profile-info-row > div:last-child {
+  min-width: 0;
+}
+
+body .profile-page .profile-info .profile-info-row span,
+body .profile-page .profile-info .profile-info-row strong {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+body .profile-page .profile-info .profile-info-row span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+body .profile-page :is(.profile-back, .profile-back-inline, .profile-cover-button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 24px;
+  background: #f0f2f5;
+  color: #080809;
+  cursor: pointer;
+}
+
+body .profile-page .profile-cover .profile-back {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+}
+
+body .profile-page .profile-page-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 24px;
+}
+
+body .profile-page .profile-form {
+  padding: 0 24px 24px;
+}
+
+body .profile-page .profile-form .profile-cover-editor {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+body .profile-page .profile-form .profile-cover-editor .profile-cover-button {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  margin: 0;
+  background: white;
+}
+
+body .profile-page .profile-form .profile-avatar-editor {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  padding-left: 16px;
+}
+
+body .profile-page .profile-form .profile-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+body .profile-page .profile-form .profile-form-grid .profile-field-full {
+  grid-column: 1 / -1;
+}
+
+body .profile-page .profile-form .field label {
+  display: block;
+  font-weight: 600;
+}
+
+body .profile-page .profile-form .field .input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #dddfe2;
+  border-radius: 10px;
+  background: #fafafa;
+  color: #080809;
+}
+
+body .profile-page .profile-form .field .profile-textarea {
+  resize: vertical;
+}
+
+body .profile-page .profile-form .field .profile-field-hint {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+body .profile-page .profile-form .profile-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+body .profile-page .btn i {
+  margin-right: 8px;
+}
+
+@media (max-width: 760px) {
+body .profile-page :is(.profile-cover, .profile-cover-editor) {
+    height: 170px;
+  }
+
+body .profile-page .profile-card,
+  body .profile-page .profile-form {
+    padding-inline: 16px;
+  }
+
+body .profile-page .profile-form .profile-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

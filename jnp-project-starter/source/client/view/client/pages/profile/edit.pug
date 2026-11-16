@@ -1,0 +1,58 @@
+extends ../../layouts/default.pug
+
+block main
+  .profile-page
+    .profile-edit-shell
+      .profile-page-head
+        a.profile-back-inline(href="/profile/me", aria-label="Quay lại hồ sơ")
+          i.fa-solid.fa-arrow-left
+        div
+          h1 Chỉnh sửa hồ sơ
+          p.muted Cập nhật thông tin mà mọi người nhìn thấy về bạn.
+
+      form.profile-form(action="/profile/me/edit?_method=PATCH", method="POST", enctype="multipart/form-data")
+        .profile-cover-editor.has-image
+          img.profile-cover-image(src=(myUser.cover || "/client/images/cover.png"), alt=`Ảnh bìa của ${myUser.fullName}`, data-cover-preview)
+          .profile-cover-shade
+          label.profile-cover-button(for="cover")
+            i.fa-solid.fa-camera
+            | Đổi ảnh bìa
+          input.sr-only#cover(type="file", name="cover", accept="image/*")
+
+        .profile-avatar-editor
+          .profile-avatar.profile-avatar-edit
+            img(src=(myUser.avatar || "/client/images/avatar.jpg"), alt=myUser.fullName, data-avatar-preview)
+          .profile-avatar-copy
+            label.btn.btn-soft(for="avatar")
+              i.fa-solid.fa-camera
+              | Chọn ảnh
+            input.sr-only#avatar(type="file", name="avatar", accept="image/*")
+
+        .profile-divider
+
+        .profile-form-grid
+          .field.profile-field-full
+            label(for="fullName") Họ và tên
+            input.input#fullName(type="text", name="fullName", value=myUser.fullName, maxlength="80", autocomplete="name", required)
+
+          .field.profile-field-full
+            label(for="selfIntro") Giới thiệu bản thân
+            textarea.input.profile-textarea#selfIntro(name="selfIntro", maxlength="250", rows="4", placeholder="Viết vài dòng giới thiệu về bạn...")= myUser.selfIntro || ""
+            .profile-field-hint Tối đa 250 ký tự.
+
+          .field
+            label(for="email") Email
+            input.input#email(type="email", name="email", value=myUser.email, autocomplete="email", required)
+
+          .field
+            label(for="phone") Số điện thoại
+            input.input#phone(type="tel", name="phone", value=myUser.phone, maxlength="20", autocomplete="tel")
+
+        .profile-form-actions
+          a.btn(href="/profile/me") Hủy
+          button.btn.btn-primary(type="submit")
+            i.fa-solid.fa-floppy-disk
+            | Lưu thay đổi
+
+block script
+  script(src="/client/js/profile.js")

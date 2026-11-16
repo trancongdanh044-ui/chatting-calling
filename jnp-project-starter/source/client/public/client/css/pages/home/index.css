@@ -1,0 +1,196 @@
+/* pages/home - Messenger theme and responsive styles. */
+
+body .main-row {
+  height: 100dvh;
+  padding-left: var(--rail-width);
+}
+
+body .main-row .menu {
+  position: fixed;
+  inset: 12px auto 12px var(--rail-width);
+  width: var(--list-width);
+  height: auto;
+  max-height: none;
+  padding: 20px 8px 8px;
+  border: 0;
+  border-radius: 16px;
+  z-index: 10;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+body .main-row .menu .inner-menu {
+  height: 100%;
+  min-height: 0;
+}
+
+body .main-row .menu .inner-menu .menu-name {
+  padding: 0 12px 14px;
+}
+
+body .main-row .menu .inner-menu .menu-name .name-detail {
+  margin: 0;
+  font-size: 27px;
+  line-height: 1.25;
+  font-weight: 750;
+  letter-spacing: -.8px;
+}
+
+body .main-row .menu .inner-menu .menu-search {
+  align-items: center;
+  flex-shrink: 0;
+  gap: 8px;
+  min-height: 40px;
+  margin: 0 8px;
+  padding: 0 14px;
+  border-radius: 24px;
+  background: #f0f2f5;
+  color: var(--muted);
+}
+
+body .main-row .menu .inner-menu .menu-search label {
+  margin: 0;
+  font-size: 15px;
+}
+
+body .main-row .menu .inner-menu .menu-search input {
+  min-width: 0;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+}
+
+body .main-row .menu .inner-menu .menu-search:focus-within {
+  box-shadow: 0 0 0 2px #a9caff;
+}
+
+body .main-row .menu .inner-menu .menu-feature {
+  gap: 6px;
+  margin: 0;
+  padding: 14px 8px 12px;
+}
+
+body .main-row .menu .inner-menu .menu-feature .feature-item {
+  width: auto;
+  min-height: 34px;
+  margin: 0;
+  padding: 6px 12px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+body .main-row .menu .inner-menu .menu-feature .feature-item:hover {
+  background: #f0f2f5;
+}
+
+body .main-row .menu .inner-menu .menu-feature .feature-item.active {
+  color: #0059df;
+  background: #e7f0ff;
+}
+
+body .main-row .menu .inner-menu .menu-item {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  padding: 0;
+  overflow-y: auto;
+}
+
+body .main-row .menu .inner-menu .menu-item > p {
+  padding: 24px 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
+body .main-row .menu .inner-menu .menu-item .inner-item {
+  align-items: center;
+  flex-shrink: 0;
+  min-height: 80px;
+  margin: 0 0 2px;
+  padding: 10px;
+  border-radius: 12px;
+  color: #080809;
+  transition: background .15s;
+}
+
+body .main-row .menu .inner-menu .menu-item .inner-item:hover {
+  background: #f2f2f2;
+}
+
+body .main-row .menu .inner-menu .menu-item .inner-item .box-avatar {
+  flex: 0 0 56px;
+  margin-right: 12px;
+}
+
+body .main-row .menu .inner-menu .menu-item .inner-item .box-avatar img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border: 0;
+}
+
+body .main-row .menu .inner-menu .menu-item .inner-item .box-avatar .box-status[status-online="online"] {
+  width: 15px;
+  height: 15px;
+  right: 0;
+  bottom: 1px;
+  background: #31a24c;
+  border: 3px solid white;
+}
+
+body .main-row .menu .inner-menu .menu-item .inner-item .box-info {
+  flex: 1;
+  min-width: 0;
+}
+
+body .main-row .menu .inner-menu .menu-item .inner-item .box-info .info-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+body .main-row .menu .inner-menu .menu-item .inner-item .box-info .info-message {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  color: var(--muted);
+}
+
+body .main-row .menu .inner-menu .menu-item .inner-item .box-info .info-message .message-brief {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+body .main-row .menu .inner-menu .menu-item .inner-item .box-info .info-message .message-time {
+  flex-shrink: 0;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+body .main-row .menu {
+    inset-block: 8px;
+    padding: 12px 4px;
+    border-radius: 12px;
+  }
+
+body .main-row .menu .inner-menu .menu-item .inner-item {
+    justify-content: center;
+    min-height: 76px;
+    padding: 8px 4px;
+  }
+
+body .main-row .menu .inner-menu .menu-item .inner-item .box-avatar {
+    margin: 0;
+  }
+}

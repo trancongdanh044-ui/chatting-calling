@@ -3,6 +3,7 @@ const authRoute = require('./auth.route');
 const friendRoute = require('./friend.route');
 const chatRoute = require('./chat.route');
 const groupRoute = require('./group.route');
+const profileRoute = require('./profile.route');
 
 const authMiddleware = require('../middleware/auth.middleware');
 
@@ -16,4 +17,6 @@ module.exports = (app) =>{
   app.use("/chat", authMiddleware.requireAuth, chatRoute);
   
   app.use("/group", authMiddleware.requireAuth, groupRoute);
+  
+  app.use("/profile", authMiddleware.requireAuth, profileRoute);
 }
