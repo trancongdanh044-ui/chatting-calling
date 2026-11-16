@@ -1,5 +1,5 @@
 if(myRoomChat)
-  .chat(my-user-id=myUser.id my-user-name=myUser.fullName)
+  .chat(my-user-id=myUser.id my-user-name=myUser.fullName data-call-room-id=myRoomChat.id data-call-room-type=myRoomChat.typeRoom data-call-peer-id=(myRoomChat.friendId || "") data-call-name=myRoomChat.title data-call-avatar=myRoomChat.avatar)
     .inner-head
       div(class="box-user" my-friend-id=(myRoomChat.friendId || ""))
         a(class="user-avatar" href=`/profile/detail/${myRoomChat.friendId}`)

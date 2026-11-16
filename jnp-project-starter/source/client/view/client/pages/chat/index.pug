@@ -4,10 +4,10 @@ block main
   .main-row
     include ../../partials/sider.pug
     include ../../partials/main-chat.pug
-    include ../../partials/chat-info.pug
+    if(myRoomChat)
+      include ../../partials/chat-info.pug
 
 block script 
-  script(src="/client/js/alert.js")
   //- Chat
   script(type="module" src="/client/js/chat.js")
   //- Emoji-picker

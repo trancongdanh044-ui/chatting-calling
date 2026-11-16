@@ -37,6 +37,9 @@ app.use(flash());
 
 // Socket io
 global._io = io;
+require('./source/server/socket/auth.socket')();
+require('./source/server/socket/call.socket')();
+require('./source/server/socket/group-call.socket')();
 
 route(app);
 

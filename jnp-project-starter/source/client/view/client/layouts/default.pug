@@ -9,16 +9,24 @@ html(lang="en")
     link(rel="stylesheet" type="text/css" href="https://unpkg.com/file-upload-with-preview/dist/style.css")
     link(rel="stylesheet", href="/bootstrap/bootstrap.min.css")
     link(rel="stylesheet", href="/client/css/style.css")
-  body
+    link(rel="stylesheet", href="/client/css/call.css")
+  body(data-my-name=myUser.fullName data-my-avatar=(myUser.avatar || "/client/images/avatar.jpg"))
     include ../partials/header.pug
 
     block main
+
+    include ../partials/call-overlay.pug
+    include ../partials/group-call-overlay.pug
+    #toast-area(aria-live="polite")
 
     script(src="/bootstrap/jquery.slim.min.js")
     script(src="/bootstrap/bootstrap.bundle.min.js")
     //- Socket io
     script(src="/socket.io/socket.io.js")
     script(src="/client/js/socket.js")
+    script(src="/client/js/config.js")
+    script(src="/client/js/call.js")
+    script(src="/client/js/group-call.js")
     //- User
     script(src="/client/js/users.js")
     //- Alert
