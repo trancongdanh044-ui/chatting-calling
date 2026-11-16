@@ -1,5 +1,6 @@
 const express = require('express');
 require('dotenv').config();
+const methodOerride = require('method-override');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -25,6 +26,9 @@ app.use(express.static("./source/client/public"));
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// method-override
+app.use(methodOerride('_method'));
 
 // express-flash
 app.use(cookieParser('dhafdaodoadhadoajafdfohfflna'));
