@@ -92,7 +92,7 @@ module.exports.addMember = async (req, res) => {
   // console.log(myFriends);
 
   res.render("client/pages/group/add-member.pug", {
-    pageTitle: "Thêm thành viên", 
+    pageTitle: "Thêm thành viên",
     myRoomChatId: roomChatId,
     candidates: myFriends
   });
@@ -107,19 +107,18 @@ module.exports.addMemberPatch = async (req, res) => {
       return res.redirect(`/chat/${roomChatId}`);
     }
     const memberIds = Array.isArray(members) ? members : [members];
-    await RoomChat.updateOne(
-      { _id: roomChatId },
-      {
-        $push: {
-          users: {
-            $each: memberIds.map(userId => ({
-              user_id: userId,
-              role: "member"
-            }))
-          }
+    await RoomChat.updateOne({
+      _id: roomChatId
+    }, {
+      $push: {
+        users: {
+          $each: memberIds.map(userId => ({
+            user_id: userId,
+            role: "member"
+          }))
         }
       }
-    );
+    });
     return res.redirect(`/chat/${roomChatId}`);
   } catch (error) {
     console.error(error);
@@ -127,10 +126,109 @@ module.exports.addMemberPatch = async (req, res) => {
   }
 };
 
+// [GET] /group/:roomChatId/change-role/:userId
+module.exports.changeRole = async (req, res) => {
+  try {
+    const myUser = res.locals.myUser;
+    const userId = req.params.userId;
+    const roomChatId = req.params.roomChatId;
+    // Không cho chuyển quyền cho chính mình
+    if (String(myUser.id) === String(userId)) {
+      req.flash("error", "Không thể chuyển quyền cho chính mình");
+      return res.redirect(req.get("Referrer") || "/chat")
+    }
+
+    const result = await RoomChat.updateOne({
+      _id: roomChatId,
+      deleted: false,
+      typeRoom: "group",
+      $and: [{
+          users: {
+            $elemMatch: {
+              user_id: myUser.id,
+              role: "superAdmin",
+            },
+          },
+        },
+        {
+          "users.user_id": userId
+        },
+      ],
+    }, {
+      $set: {
+        "users.$[target].role": "superAdmin",
+        "users.$[current].role": "member",
+      },
+    }, {
+      arrayFilters: [{
+          "target.user_id": userId
+        },
+        {
+          "current.user_id": myUser.id
+        },
+      ],
+    });
+
+    if (result.matchedCount === 0) {
+      req.flash("error", "Chuyển quyền thất bại !");
+      return res.redirect(req.get("Referrer") || "/chat");
+    }
+    req.flash("success", "Chuyển quyển thành công !");
+    return res.redirect(req.get("Referrer") || "/chat");
+  } catch (error) {
+    console.log(error);
+    res.redirect("/chat");
+  }
+}
+
 // [GET] /group/:roomChatId/delete-member/:userId
 module.exports.deleteMember = async (req, res) => {
-  res.send('ok');
-}
+  try {
+    const { userId, roomChatId } = req.params;
+    const myUser = res.locals.myUser;
+
+    if (String(myUser.id) === String(userId)) {
+      req.flash("error", "Bạn cần chuyển quyền trước khi rời nhóm!");
+      return res.redirect(req.get("Referrer") || "/chat");
+    }
+
+    const result = await RoomChat.updateOne(
+      {
+        _id: roomChatId,
+        deleted: false,
+        typeRoom: "group",
+        $and: [
+          {
+            users: {
+              $elemMatch: {
+                user_id: myUser.id,
+                role: "superAdmin",
+              },
+            },
+          },
+          { "users.user_id": userId },
+        ],
+      },
+      {
+        $pull: {
+          users: { user_id: userId },
+        },
+      }
+    );
+
+    if (result.modifiedCount === 0) {
+      req.flash("error", "Xóa không thành công!");
+      return res.redirect(req.get("Referrer") || "/chat");
+    }
+
+    req.flash("success", "Xóa thành công!");
+    return res.redirect(req.get("Referrer") || "/chat");
+  } catch (error) {
+    console.error(error);
+    req.flash("error", "Đã xảy ra lỗi khi xóa thành viên!");
+    return res.redirect(req.get("Referrer") || "/chat");
+  }
+};
 
 // [PATCH] /group/leave/:roomChatId
 module.exports.leave = async (req, res) => {
@@ -141,22 +239,23 @@ module.exports.leave = async (req, res) => {
     console.log(roomChatId);
     console.log(userId);
 
-    const result = await RoomChat.updateOne(
-      {
-        _id: roomChatId,
-        deleted: false,
-        typeRoom: "group",
-        users: {
-          $elemMatch: {
-            user_id: userId,
-            role: "member"
-          }
+    const result = await RoomChat.updateOne({
+      _id: roomChatId,
+      deleted: false,
+      typeRoom: "group",
+      users: {
+        $elemMatch: {
+          user_id: userId,
+          role: "member"
         }
-      },
-      {
-        $pull: { users: { user_id: userId } }
       }
-    );
+    }, {
+      $pull: {
+        users: {
+          user_id: userId
+        }
+      }
+    });
 
     console.log(result);
 
@@ -164,7 +263,7 @@ module.exports.leave = async (req, res) => {
       req.flash("error", "Không thể rời nhóm.");
       return res.redirect("/chat");
     }
-    
+
     req.flash("success", "Đã rời khỏi nhóm.");
     return res.redirect("/chat");
   } catch (error) {
@@ -173,6 +272,7 @@ module.exports.leave = async (req, res) => {
   }
 };
 
-module.exports.dissolve = async(req, res) =>{
+// [DELETE] /group/disband/:roomChatId
+module.exports.disband = async (req, res) => {
   res.send('ok');
 }

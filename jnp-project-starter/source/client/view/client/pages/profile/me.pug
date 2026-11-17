@@ -48,3 +48,10 @@ block main
             div
               span Bạn bè
               strong #{myUser.friendsList ? myUser.friendsList.length : 0} người bạn
+
+        .profile-divider
+
+        .profile-actions
+          a.btn.btn-outline-danger(href="/auth/logout")
+            i.fa-solid.fa-right-from-bracket
+            | Đăng xuất

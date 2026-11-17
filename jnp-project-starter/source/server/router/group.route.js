@@ -13,10 +13,12 @@ router.get("/:roomChatId/add-member", controller.addMember);
 
 router.patch("/:roomChatId/add-member", controller.addMemberPatch);
 
+router.get("/:roomChatId/change-role/:userId", controller.changeRole);
+
 router.get("/:roomChatId/delete-member/:userId", controller.deleteMember);
 
 router.patch("/leave/:roomChatId", controller.leave);
 
-router.patch("/disband/:roomChatId", controller.dissolve);
+router.patch("/disband/:roomChatId", controller.disband);
 
 module.exports = router;
