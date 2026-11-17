@@ -318,3 +318,55 @@
     opacity: 1;
   }
 }
+.inner-call-log {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background-color: #f0f2f5;
+  border: 1px solid #e4e6eb;
+  max-width: 280px;
+}
+
+.inner-call-log .call-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #e4e6eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.inner-call-log.call-missed .call-icon {
+  background-color: #ffebe9;
+  color: #e41e3f;
+}
+
+.inner-call-log .call-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #050505;
+}
+
+.inner-call-log .call-subtitle {
+  font-size: 12px;
+  color: #65676b;
+}
+
+.inner-call-log .btn-recall {
+  margin-left: auto;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: #e4e6eb;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.inner-call-log .btn-recall:hover {
+  background-color: #d8dadf;
+}

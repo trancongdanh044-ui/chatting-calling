@@ -25,21 +25,75 @@ if(myRoomChat)
             .inner-message
               .inner-name
                 | #{chat.fullName}
+              if(chat.type == "call")
+                - const info = chat.callInfo || {};
+                - const isMissed = info.status === "missed" || info.status === "rejected";
+                .inner-call-log(class=(isMissed ? "call-missed" : "call-completed"))
+                  .call-icon
+                    if(info.callType === "audio")
+                      i.fa-solid.fa-phone
+                    else
+                      i.fa-solid.fa-video
+                  .call-detail
+                    .call-title
+                      if(info.status === "missed")
+                        | Cuộc gọi nhỡ
+                      else if(info.status === "rejected")
+                        | Cuộc gọi bị từ chối
+                      else
+                        | #{info.callType === "audio" ? "Cuộc gọi thoại" : "Cuộc gọi video"}
+                    .call-subtitle
+                      if(info.status === "completed")
+                        - const mins = Math.floor((info.duration || 0) / 60);
+                        - const secs = (info.duration || 0) % 60;
+                        | #{mins > 0 ? `${mins} phút ` : ""}#{secs} giây
+                      else
+                        | Nhấn để gọi lại
+                  button.btn-recall(type="button" data-call-type=(info.callType || "video"))
+                    | Gọi lại
+              else
+                if(chat.content)
+                  .inner-content 
+                    | #{chat.content}
+                if(chat.images && chat.images.length > 0)
+                  .inner-images
+                    each image in chat.images 
+                      img(src=image, alt="Ảnh" width="250px" height="auto")
+          else
+            if(chat.type == "call")
+              - const info = chat.callInfo || {};
+              - const isMissed = info.status === "missed" || info.status === "rejected";
+              .inner-call-log(class=(isMissed ? "call-missed" : "call-completed"))
+                .call-icon
+                  if(info.callType === "audio")
+                    i.fa-solid.fa-phone
+                  else
+                    i.fa-solid.fa-video
+                .call-detail
+                  .call-title
+                    if(info.status === "missed")
+                      | Người nhận không trả lời
+                    else if(info.status === "rejected")
+                      | Cuộc gọi bị từ chối
+                    else
+                      | #{info.callType === "audio" ? "Cuộc gọi thoại" : "Cuộc gọi video"}
+                  .call-subtitle
+                    if(info.status === "completed")
+                      - const mins = Math.floor((info.duration || 0) / 60);
+                      - const secs = (info.duration || 0) % 60;
+                      | #{mins > 0 ? `${mins} phút ` : ""}#{secs} giây
+                    else
+                      | Nhấn để gọi lại
+                button.btn-recall(type="button" data-call-type=(info.callType || "video"))
+                  | Gọi lại
+            else
               if(chat.content)
                 .inner-content 
                   | #{chat.content}
-              if(chat.images.length > 0)
+              if(chat.images && chat.images.length > 0)
                 .inner-images
                   each image in chat.images 
                     img(src=image, alt="Ảnh" width="250px" height="auto")
-          else
-            if(chat.content)
-              .inner-content 
-                | #{chat.content}
-            if(chat.images.length > 0)
-              .inner-images
-                each image in chat.images 
-                  img(src=image, alt="Ảnh" width="250px" height="auto")
       //- div(class="inner-list-typing")
       //-   div(class="box-typing")
       //-     div(class="inner-name") Lê Văn A
