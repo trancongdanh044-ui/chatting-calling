@@ -9,4 +9,14 @@ router.get("/create", controller.create);
 
 router.post("/create", controller.createPost);
 
+router.get("/:roomChatId/add-member", controller.addMember);
+
+router.patch("/:roomChatId/add-member", controller.addMemberPatch);
+
+router.get("/:roomChatId/delete-member/:userId", controller.deleteMember);
+
+router.patch("/leave/:roomChatId", controller.leave);
+
+router.patch("/disband/:roomChatId", controller.dissolve);
+
 module.exports = router;

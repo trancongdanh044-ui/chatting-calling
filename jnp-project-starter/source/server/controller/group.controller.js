@@ -2,7 +2,7 @@ const User = require('../model/user.model');
 const RoomChat = require('../model/room-chat.model');
 
 // [GET] /group
-module.exports.index = async(req, res) =>{
+module.exports.index = async (req, res) => {
   const myUser = res.locals.myUser;
   const groupChatList = await RoomChat.find({
     deleted: false,
@@ -16,11 +16,13 @@ module.exports.index = async(req, res) =>{
 }
 
 // [GET] /group/create
-module.exports.create = async(req, res) =>{
+module.exports.create = async (req, res) => {
   const myUser = res.locals.myUser;
   const friendIds = myUser.friendsList.map((friend) => friend.user_id);
   const friendsList = await User.find({
-    _id: {$in: friendIds}
+    _id: {
+      $in: friendIds
+    }
   }).select("_id fullName email avatar");
   // console.log(friendsList);
   res.render("client/pages/group/create.pug", {
@@ -30,16 +32,16 @@ module.exports.create = async(req, res) =>{
 }
 
 // [POST] /group/create
-module.exports.createPost = async(req, res) =>{
+module.exports.createPost = async (req, res) => {
   const myUser = res.locals.myUser;
   const groupName = req.body.groupName;
   const members = req.body.members || [];
-  if(typeof members === "string" || members.length < 2){
+  if (typeof members === "string" || members.length < 2) {
     req.flash("error", "Chỉ cho phép tạo nhóm từ 3 người trở lên !");
     return res.redirect(req.get("Referrer" || "/chat"));
   }
   let users = [];
-  for(const id of members){
+  for (const id of members) {
     users.push({
       user_id: id,
       role: "member"
@@ -56,11 +58,121 @@ module.exports.createPost = async(req, res) =>{
   })
 
   const result = await objectRoomChat.save();
-  if(result){
+  if (result) {
     req.flash("success", "Tạo nhóm thành công !");
     res.redirect("/group");
-  }else{
+  } else {
     req.flash("error", "Tạo nhóm thất bại !");
     res.redirect(req.get("Referrer") || "/");
   }
+}
+
+// [GET] /group/:roomChatId/add-member
+module.exports.addMember = async (req, res) => {
+  const roomChatId = req.params.roomChatId;
+  const myRoomChat = await RoomChat.findOne({
+    _id: roomChatId,
+  });
+  const myUser = res.locals.myUser;
+  const friendIds = myUser.friendsList.map((friend) => friend.user_id);
+  const friendIdsInMyRoomChat = myRoomChat.users.map((user) => user.user_id);
+  const myFriends = await User.find({
+    $and: [{
+        _id: {
+          $in: friendIds
+        }
+      },
+      {
+        _id: {
+          $nin: friendIdsInMyRoomChat
+        }
+      }
+    ],
+  }).select("-password -tokenUser");
+  // console.log(myFriends);
+
+  res.render("client/pages/group/add-member.pug", {
+    pageTitle: "Thêm thành viên", 
+    myRoomChatId: roomChatId,
+    candidates: myFriends
+  });
+}
+
+// [PATCH] /group/:roomChatId/add-members
+module.exports.addMemberPatch = async (req, res) => {
+  try {
+    const roomChatId = req.params.roomChatId;
+    const members = req.body.members;
+    if (!members) {
+      return res.redirect(`/chat/${roomChatId}`);
+    }
+    const memberIds = Array.isArray(members) ? members : [members];
+    await RoomChat.updateOne(
+      { _id: roomChatId },
+      {
+        $push: {
+          users: {
+            $each: memberIds.map(userId => ({
+              user_id: userId,
+              role: "member"
+            }))
+          }
+        }
+      }
+    );
+    return res.redirect(`/chat/${roomChatId}`);
+  } catch (error) {
+    console.error(error);
+    return res.redirect("/chat");
+  }
+};
+
+// [GET] /group/:roomChatId/delete-member/:userId
+module.exports.deleteMember = async (req, res) => {
+  res.send('ok');
+}
+
+// [PATCH] /group/leave/:roomChatId
+module.exports.leave = async (req, res) => {
+  try {
+    const roomChatId = req.params.roomChatId;
+    const userId = res.locals.myUser.id;
+
+    console.log(roomChatId);
+    console.log(userId);
+
+    const result = await RoomChat.updateOne(
+      {
+        _id: roomChatId,
+        deleted: false,
+        typeRoom: "group",
+        users: {
+          $elemMatch: {
+            user_id: userId,
+            role: "member"
+          }
+        }
+      },
+      {
+        $pull: { users: { user_id: userId } }
+      }
+    );
+
+    console.log(result);
+
+    if (result.modifiedCount === 0) {
+      req.flash("error", "Không thể rời nhóm.");
+      return res.redirect("/chat");
+    }
+    
+    req.flash("success", "Đã rời khỏi nhóm.");
+    return res.redirect("/chat");
+  } catch (error) {
+    console.log(error);
+    return res.redirect("/chat");
+  }
+};
+
+module.exports.dissolve = async(req, res) =>{
+  res.send('ok');
 }

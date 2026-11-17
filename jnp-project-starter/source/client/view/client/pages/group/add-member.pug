@@ -1,0 +1,46 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+
+block main
+  .group-create.group-add-member
+    +alert-success(5000)
+    +alert-error(5000)
+    .container
+      .row
+        .col-12.col-lg-8.mx-auto
+          +box-head("Thêm thành viên")
+          .group-body
+            form#formAddMember(action=`/group/${myRoomChatId}/add-member?_method=PATCH` method='POST')
+              if myRoomChatId
+                input(type='hidden' name='roomChatId' value=myRoomChatId)
+              .group-search
+                i.fa-solid.fa-magnifying-glass(aria-hidden='true')
+                label.sr-only(for='member-search') Tìm bạn bè
+                input#member-search.form-control(type='search' placeholder='Tìm theo tên hoặc email...' autocomplete='off')
+
+              .d-flex.justify-content-between.align-items-center.mb-2
+                h2.h6.mb-0 Bạn bè
+              .group-friends
+                each friend in candidates
+                  label.group-friend(data-member-search=(friend.fullName || '') + ' ' + (friend.email || ''))
+                    input(type='checkbox' name='members' value=friend._id)
+                    img.add-member-avatar(src=friend.avatar || '/client/images/avatar.jpg' alt='' loading='lazy')
+                    span.add-member-info
+                      span.d-block.font-weight-bold=friend.fullName
+                      if friend.email
+                        small.text-muted=friend.email
+                else
+                  .text-center.text-muted.py-4
+                    i.fa-solid.fa-user-group.mb-3(aria-hidden='true')
+                    p.mb-0 Chưa có bạn bè có thể thêm vào nhóm.
+                p#member-search-empty.text-center.text-muted.py-4.mb-0(hidden) Không tìm thấy bạn bè phù hợp.
+
+              .group-footer
+                a.btn.btn-light(href=`/chat/${myRoomChatId}`) Hủy
+                button#add-member-submit.btn.btn-primary(type='submit')
+                  i.fa-solid.fa-user-plus.mr-2(aria-hidden='true')
+                  | Thêm thành viên
+
+block script
+  script(src='/client/js/add-member.js')

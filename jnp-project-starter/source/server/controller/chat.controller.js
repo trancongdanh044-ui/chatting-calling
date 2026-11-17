@@ -43,12 +43,12 @@ module.exports.detail = async (req, res) => {
     // End Room Chat List
 
     // Search
-    // Search by title
+      // Search by title
     if (req.query.keyword) {
       const keyword = req.query.keyword;
       roomChatList = searchHelper.searchRoomChatByTitle(keyword, roomChatList);
     }
-    // End search by title
+      // End search by title
     // End Search
 
     const roomChatId = req.params.roomChatId;
@@ -72,6 +72,23 @@ module.exports.detail = async (req, res) => {
       if (!myRoomChat.avatar) {
         myRoomChat.avatar = "/client/images/group-avatar.png"
       }
+      myRoomChat.myRole = myRoomChat.users.find((user) => myUser.id === user.user_id)?.role;
+      myUser.myRole =  myRoomChat.myRole;
+      const memberProfiles = await User.find({
+        _id: { $in: myRoomChat.users.map(user => user.user_id) }
+      }).select("fullName avatar").lean();
+      const profilesById = new Map(memberProfiles.map(user => [String(user._id), user]));
+      myRoomChat.members = myRoomChat.users.map(member => {
+        const profile = profilesById.get(member.user_id);
+        return {
+          userId: member.user_id,
+          fullName: profile?.fullName || "Người dùng không còn tồn tại",
+          avatar: profile?.avatar || "/client/images/avatar.jpg",
+          role: member.role,
+          isMe: member.user_id === myUser.id,
+          hasProfile: Boolean(profile)
+        };
+      });
     }
     // Hết lấy ra Room Chat theo id
 

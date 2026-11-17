@@ -208,3 +208,55 @@ if (infoPanel && infoToggle) {
 }
 
 // End Chat Info
+
+// Group member list
+const memberSection = document.querySelector('#info-panel .info-members');
+if (memberSection) {
+  const toggle = memberSection.querySelector('.info-members-toggle');
+  const content = memberSection.querySelector('#info-members-content');
+  const search = memberSection.querySelector('#info-member-search');
+  const members = [...memberSection.querySelectorAll('.info-member')];
+  const empty = memberSection.querySelector('#info-members-empty');
+  toggle.setAttribute('aria-expanded', 'false');
+  content.hidden = true;
+
+  const normalizeName = value => value.normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase().trim();
+
+  toggle.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') !== 'true';
+    toggle.setAttribute('aria-expanded', String(expanded));
+    content.hidden = !expanded;
+  });
+
+  search.addEventListener('input', () => {
+    const keyword = normalizeName(search.value);
+    let visibleCount = 0;
+    members.forEach(member => {
+      const matches = normalizeName(member.dataset.memberName).includes(keyword);
+      member.hidden = !matches;
+      if (matches) visibleCount++;
+    });
+    empty.hidden = visibleCount > 0;
+  });
+}
+
+
+// Rời khỏi nhóm && Giải tán nhóm
+const formDataGroup = document.querySelector("[form-data-group]");
+if(formDataGroup){
+  formDataGroup.addEventListener('submit', (e) =>{
+    e.preventDefault();
+    const dataGroupAction = formDataGroup.getAttribute("data-group-action");
+    const dataRoomId = formDataGroup.getAttribute("data-room-id");
+    let action = "";
+    if(dataGroupAction === "leave") {
+      action = `/group/leave/${dataRoomId}?_method=PATCH`;
+    }else if(dataGroupAction === "disband"){
+      action = `/group/disband/${dataRoomId}?_method=PATCH`;
+    }
+    formDataGroup.action = action;
+    formDataGroup.submit();
+  });
+}
+// Hết rời khỏi nhóm && giải tán nhóm

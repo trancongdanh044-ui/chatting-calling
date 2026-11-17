@@ -14,14 +14,42 @@ aside.info-panel#info-panel
 
   .info-actions
     //- Tắt thông báo: lưu tạm trên trình duyệt (chưa có backend)
-    button#btn-mute(type="button")
-      span.icon-btn
-        i.fa-solid.fa-bell
-      | Thông báo
-    button(type="button", data-demo="Tìm trong cuộc trò chuyện")
-      span.icon-btn
-        i.fa-solid.fa-magnifying-glass
-      | Tìm kiếm
+    if(myRoomChat.typeRoom === "group")
+      a#btn-mute(href=`/group/${myRoomChat._id}/add-member`)
+        span.icon-btn
+          <i class="fa-solid fa-user-plus"></i>
+        | Thêm thành viên
+      <b><p>Vai trò của bạn: <p></b> #{myRoomChat.myRole === "superAdmin" ? "Nhóm trưởng" : "Thành viên"}
+    //- button(type="button", data-demo="Tìm trong cuộc trò chuyện")
+    //-   span.icon-btn
+    //-     i.fa-solid.fa-magnifying-glass
+    //-   | Tìm kiếm
+
+  if myRoomChat.typeRoom === "group"
+    section.info-section.info-members
+      h3
+        button.info-members-toggle(type="button" aria-expanded="false" aria-controls="info-members-content")
+          span Danh sách thành viên (#{myRoomChat.users.length})
+          i.fa-solid.fa-chevron-up(aria-hidden="true")
+      #info-members-content(hidden)
+        label.info-member-search(for="info-member-search")
+          i.fa-solid.fa-magnifying-glass(aria-hidden="true")
+          input#info-member-search(type="search" placeholder="Tìm thành viên..." autocomplete="off" aria-label="Tìm thành viên")
+        ul.info-member-list
+          each member in (myRoomChat.members || [])
+            li.info-member(data-member-name=member.fullName)
+              a.info-member-profile(href=member.hasProfile ? `/profile/detail/${member.userId}` : undefined)
+                img.info-member-avatar(src=member.avatar alt="" loading="lazy")
+                span.info-member-details
+                  span.info-member-name
+                    | #{member.fullName}
+                    if member.isMe
+                      span.info-member-me  (Bạn)
+                  span.info-member-role(class=(member.role === "superAdmin" || member.role === "admin") ? "is-admin" : "") #{member.role === "superAdmin" ? "Nhóm trưởng" : "Thành viên"}
+              if(myUser.myRole === "superAdmin" && member.userId !== myUser.id)
+                a(class="btn btn-sm btn-danger" href=`/group/${myRoomChat.id}/delete-member/${member.userId}`) Xoá
+                a(class="btn btn-sm btn-primary" href=`/group/${myRoomChat.id}/change-role/${member.userId}`) Đổi vai trò
+        p.info-empty#info-members-empty(hidden=(myRoomChat.members || []).length > 0 role="status" aria-live="polite") Không tìm thấy thành viên
 
   section.info-section
     h3 Ảnh đã gửi
@@ -32,3 +60,15 @@ aside.info-panel#info-panel
     h3 Tài liệu đã gửi
     .info-files#info-files
     p.info-empty#info-files-empty Chưa có tài liệu nào
+
+  if myRoomChat.typeRoom === "group"
+    if myRoomChat.myRole === "member"
+      form(class="info-section info-group-actions" method="POST" form-data-group data-group-action="leave" data-room-id=myRoomChat.id)
+        button#btn-leave-group.info-danger-button
+          i.fa-solid.fa-right-from-bracket(aria-hidden="true")
+          | Rời khỏi nhóm
+    else if myRoomChat.myRole === "superAdmin"
+      form(class="info-section info-group-actions" method="POST" form-data-group data-group-action="disband" data-room-id=myRoomChat.id)
+        button#btn-disband-group.info-danger-button
+          i.fa-solid.fa-trash-can(aria-hidden="true")
+          | Giải tán nhóm

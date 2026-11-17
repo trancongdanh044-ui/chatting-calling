@@ -1,0 +1,176 @@
+/* Add members: scoped to avoid changing the create-group page. */
+body .group-add-member > .container {
+  max-width: 920px;
+  padding: 32px 24px;
+}
+
+.group-add-member .box-head {
+  margin-bottom: 24px;
+}
+
+body .group-add-member .group-body {
+  padding: 0;
+  color: #202939;
+}
+
+.group-add-member .group-search {
+  margin-bottom: 24px;
+}
+
+.group-add-member .group-search .form-control {
+  height: 48px;
+  border-color: transparent;
+  border-radius: 12px;
+  background: #f2f4f7;
+  transition: background .18s, border-color .18s, box-shadow .18s;
+}
+
+.group-add-member .group-search .form-control:focus {
+  background: #fff;
+  border-color: var(--messenger-blue);
+  box-shadow: 0 0 0 3px #0866ff15;
+}
+
+.group-add-member #member-count {
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #f0f5ff;
+  color: #0866ff !important;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.group-add-member .group-friends {
+  max-height: min(480px, 55dvh);
+  margin-top: 14px;
+  padding: 8px 0;
+  border-color: var(--line);
+  overscroll-behavior: contain;
+}
+
+.group-add-member .group-friend {
+  gap: 14px;
+  min-height: 80px;
+  margin-bottom: 4px;
+  padding: 12px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  transition: background .18s, border-color .18s;
+}
+
+.group-add-member .group-friend:last-of-type {
+  margin-bottom: 0;
+}
+
+.group-add-member .group-friend:hover {
+  background: #f5f7fa;
+}
+
+.group-add-member .group-friend:has(input:checked) {
+  background: #edf4ff;
+  border-color: #c9ddff;
+}
+
+.group-add-member .group-friend:focus-within {
+  outline: 2px solid var(--messenger-blue);
+  outline-offset: -2px;
+}
+
+.group-add-member .group-friend input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: var(--messenger-blue);
+}
+
+.group-add-member .add-member-avatar {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #e9edf3;
+}
+
+.group-add-member .add-member-info {
+  min-width: 0;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.group-add-member .add-member-info small {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+}
+
+.group-add-member .group-friends > .text-center {
+  padding: 40px 16px !important;
+  line-height: 1.6;
+}
+
+.group-add-member .group-friends > .text-center i {
+  display: block;
+  color: #8c9db5;
+  font-size: 32px;
+}
+
+.group-add-member [hidden] {
+  display: none !important;
+}
+
+.group-add-member .group-footer {
+  padding-top: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.group-add-member .group-footer .btn {
+  min-height: 44px;
+  border-radius: 10px;
+  transition: background .18s, box-shadow .18s;
+}
+
+.group-add-member .group-footer .btn-light {
+  color: #475467;
+  background: #f2f4f7;
+  border-color: #f2f4f7;
+}
+
+.group-add-member .group-footer .btn-primary:hover {
+  background: #0758d9;
+  border-color: #0758d9;
+}
+
+.group-add-member .group-footer .btn-primary:disabled {
+  background: #a8c7fa;
+  border-color: #a8c7fa;
+  cursor: not-allowed;
+}
+
+@media (max-width: 576px) {
+  body .group-add-member > .container {
+    padding: 20px 12px;
+  }
+
+  .group-add-member .group-friend {
+    gap: 10px;
+    padding: 10px 8px;
+  }
+
+  .group-add-member .add-member-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .group-add-member .group-footer {
+    gap: 8px;
+  }
+
+  .group-add-member .group-footer .btn {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 12px;
+  }
+}
