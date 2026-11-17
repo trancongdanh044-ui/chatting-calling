@@ -5,7 +5,7 @@ module.exports.getRoomChatList = async (myUser) => {
   let roomChatList = await RoomChat.find({
     deleted: false,
     "users.user_id": myUser.id
-  });
+  }).sort({updatedAt: -1});
   // console.log(roomChatList);
 
   for (const roomChat of roomChatList) {

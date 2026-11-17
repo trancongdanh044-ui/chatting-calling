@@ -16,8 +16,7 @@ module.exports.index = async (req, res) => {
 
     // Search
     if (req.query) {
-      const keyword = req.query.keyword;
-      roomChatList = searchHelper.searchRoomChatByTitle(keyword, roomChatList);
+      roomChatList = searchHelper.searchRoomChat(req.query, roomChatList);
     }
     // End Search
 
@@ -43,12 +42,9 @@ module.exports.detail = async (req, res) => {
     // End Room Chat List
 
     // Search
-      // Search by title
-    if (req.query.keyword) {
-      const keyword = req.query.keyword;
-      roomChatList = searchHelper.searchRoomChatByTitle(keyword, roomChatList);
+     if (req.query) {
+      roomChatList = searchHelper.searchRoomChat(req.query, roomChatList);
     }
-      // End search by title
     // End Search
 
     const roomChatId = req.params.roomChatId;

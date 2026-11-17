@@ -43,6 +43,12 @@ require('./source/server/socket/group-call.socket')();
 
 route(app);
 
+app.use(async(req, res) => {
+  res.render("client/pages/error/404.pug", {
+    pageTitle: "404"
+  });
+});
+
 server.listen(port, () =>{
   console.log(`Example is listening on port ${port}`);
 });
