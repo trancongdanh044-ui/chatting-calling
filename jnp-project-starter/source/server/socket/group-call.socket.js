@@ -1,4 +1,5 @@
 const RoomChat = require('../model/room-chat.model');
+const Chat = require('../model/chat.model'); // <-- 1. THÊM IMPORT MODEL CHAT
 
 // Số người tối đa trong một cuộc gọi nhóm (mesh: mỗi người nối trực tiếp với từng người còn lại)
 const MAX_PARTICIPANTS = 4;
@@ -8,13 +9,45 @@ const PEER_SIGNALS = new Set(['offer', 'answer', 'ice']);
 // offer/answer/ice giữa từng cặp; hình và tiếng đi thẳng giữa các trình duyệt.
 // Danh tính luôn lấy từ socket đã xác thực, client không tự khai báo.
 module.exports = (io = global._io) => {
-  const calls = new Map();     // roomChatId -> { callType, memberIds, participants: Map(userId -> { socketId, name, avatar }) }
+  const calls = new Map();     // roomChatId -> { callerId, connectedAt, callType, memberIds, participants: Map(userId -> { socketId, name, avatar }) }
   const userRoom = new Map();  // userId -> roomChatId (người đang ở trong một cuộc gọi nhóm)
 
   const send = (target, payload) => io.to(target).emit('GROUP_CALL_SIGNAL', payload);
 
+  // <-- 2. THÊM HÀM LƯU LỊCH SỬ CUỘC GỌI NHÓM & BẮN REALTIME
+  const saveGroupCallLog = async (roomChatId, call) => {
+    if (!roomChatId || !call) return;
+    try {
+      const isCompleted = Boolean(call.connectedAt);
+      const status = isCompleted ? 'completed' : 'missed';
+      const duration = isCompleted
+        ? Math.max(1, Math.floor((Date.now() - call.connectedAt) / 1000))
+        : 0;
+
+      const newCallLog = new Chat({
+        user_id: call.callerId,
+        room_chat_id: roomChatId,
+        type: 'call',
+        callInfo: {
+          callType: call.callType,
+          status: status,
+          duration: duration
+        }
+      });
+      await newCallLog.save();
+
+      io.to(roomChatId).emit('SERVER_RETURN_CALL_LOG', {
+        userId: call.callerId,
+        callInfo: newCallLog.callInfo,
+        createdAt: newCallLog.createdAt
+      });
+    } catch (error) {
+      console.error('Lỗi lưu lịch sử cuộc gọi nhóm:', error);
+    }
+  };
+
   // Rời cuộc gọi: báo cho những người còn lại, hết người thì kết thúc cuộc gọi
-  const leaveCall = (userId, socketId) => {
+  const leaveCall = async (userId, socketId) => { // <-- 3. CHUYỂN THÀNH ASYNC
     const roomChatId = userRoom.get(userId);
     const call = calls.get(roomChatId);
     const me = call && call.participants.get(userId);
@@ -28,6 +61,9 @@ module.exports = (io = global._io) => {
       calls.delete(roomChatId);
       // Báo cho cả nhóm để tắt hộp "cuộc gọi đến" nếu còn đang đổ chuông
       call.memberIds.forEach((id) => send(`user:${id}`, { type: 'ended', roomChatId }));
+
+      // <-- 4. LƯU LOG KHI NGƯỜI CUỐI CÙNG RỜI CUỘC GỌI
+      await saveGroupCallLog(roomChatId, call);
     }
   };
 
@@ -60,6 +96,8 @@ module.exports = (io = global._io) => {
           const isNew = !call;
           if (isNew) {
             call = {
+              callerId: userId, // <-- 5. LƯU ID NGƯỜI BẮT ĐẦU CUỘC GỌI NHÓM
+              connectedAt: null, // <-- 6. THỜI ĐIỂM CÓ NGƯỜI THỨ 2 THAM GIA
               callType: raw.callType === 'audio' ? 'audio' : 'video',
               memberIds: room.users.map((u) => String(u.user_id)),
               participants: new Map()
@@ -73,6 +111,11 @@ module.exports = (io = global._io) => {
           const others = [...call.participants].map(([id, p]) => ({ userId: id, name: p.name, avatar: p.avatar }));
           call.participants.set(userId, { socketId: socket.id, name: socket.userName, avatar: socket.userAvatar });
           userRoom.set(userId, roomChatId);
+
+          // <-- 7. GHI NHẬN THỜI ĐIỂM BẮT ĐẦU NÓI CHUYỆN KHI CÓ TỪ 2 NGƯỜI TRỞ LÊN
+          if (call.participants.size >= 2 && !call.connectedAt) {
+            call.connectedAt = Date.now();
+          }
 
           // Người đang trong cuộc gọi biết có người mới; người mới sẽ tạo offer tới từng người đó
           call.participants.forEach((p, id) => {
@@ -103,7 +146,7 @@ module.exports = (io = global._io) => {
 
         // ----- Rời cuộc gọi -----
         if (type === 'leave') {
-          if (userRoom.get(userId) === roomChatId) leaveCall(userId, socket.id);
+          if (userRoom.get(userId) === roomChatId) await leaveCall(userId, socket.id); // <-- THÊM AWAIT
           return;
         }
 
@@ -135,6 +178,8 @@ module.exports = (io = global._io) => {
     });
 
     // Mất kết nối / đóng tab thì coi như rời cuộc gọi
-    socket.on('disconnect', () => leaveCall(userId, socket.id));
+    socket.on('disconnect', async () => { // <-- THÊM ASYNC/AWAIT
+      await leaveCall(userId, socket.id);
+    });
   });
 };

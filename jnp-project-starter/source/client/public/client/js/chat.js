@@ -163,6 +163,82 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
 });
 // End SERVER_RETURN_MESSAGE
 
+// --- THÊM MỚI: SERVER_RETURN_CALL_LOG (Hiển thị lịch sử cuộc gọi realtime) ---
+socket.on("SERVER_RETURN_CALL_LOG", (data) => {
+  const chatBox = document.querySelector(".chat");
+  const body = document.querySelector(".chat .inner-body");
+  if (!chatBox || !body) return;
+
+  const myUserId = chatBox.getAttribute("my-user-id");
+  const isOutcoming = String(myUserId) === String(data.userId);
+  const { callType = "video", status = "missed", duration = 0 } = data.callInfo || {};
+
+  let title = callType === "audio" ? "Cuộc gọi thoại" : "Cuộc gọi video";
+  let subtitle = "Nhấn để gọi lại";
+  let statusClass = "call-completed";
+
+  if (status === "missed") {
+    title = isOutcoming ? "Người nhận không trả lời" : "Cuộc gọi nhỡ";
+    statusClass = "call-missed";
+  } else if (status === "rejected") {
+    title = "Cuộc gọi bị từ chối";
+    statusClass = "call-missed";
+  } else if (status === "completed") {
+    const mins = Math.floor(duration / 60);
+    const secs = duration % 60;
+    subtitle = `${mins > 0 ? `${mins} phút ` : ""}${secs} giây`;
+  }
+
+  const cardHtml = `
+    <div class="inner-call-log ${statusClass}">
+      <div class="call-icon">
+        <i class="fa-solid ${callType === "audio" ? "fa-phone" : "fa-video"}"></i>
+      </div>
+      <div class="call-detail">
+        <div class="call-title">${title}</div>
+        <div class="call-subtitle">${subtitle}</div>
+      </div>
+      <button class="btn-recall" type="button" data-call-type="${callType}">Gọi lại</button>
+    </div>
+  `;
+
+  const div = document.createElement("div");
+  div.classList.add(isOutcoming ? "inner-outcoming" : "inner-incoming");
+
+  if (isOutcoming) {
+    div.innerHTML = cardHtml;
+  } else {
+    const avatar = data.avatar || chatBox.getAttribute("data-call-avatar") || "/client/images/avatar.jpg";
+    const fullName = data.fullName || chatBox.getAttribute("data-call-name") || "";
+    div.innerHTML = `
+      <div class="inner-avatar">
+        <img src="${avatar}" alt="">
+      </div>
+      <div class="inner-message">
+        <div class="inner-name">${fullName}</div>
+        ${cardHtml}
+      </div>
+    `;
+  }
+
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+});
+
+// Bấm nút "Gọi lại" trên thẻ lịch sử cuộc gọi
+document.addEventListener("click", (e) => {
+  const btnRecall = e.target.closest(".btn-recall");
+  if (!btnRecall) return;
+
+  const callType = btnRecall.getAttribute("data-call-type");
+  const selector = callType === "audio"
+    ? ".chat .inner-head .box-tool [call]"
+    : ".chat .inner-head .box-tool [video-call]";
+  const triggerBtn = document.querySelector(selector);
+  if (triggerBtn) triggerBtn.click();
+});
+// --- KẾT THÚC PHẦN THÊM MỚI ---
+
 // emoji-picker
 const buttonIcon = document.querySelector('.button-icon')
 const tooltip = document.querySelector('.tooltip')
