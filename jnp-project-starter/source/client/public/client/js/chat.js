@@ -1,5 +1,75 @@
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js'
 
+// Display timestamps locally without changing the message API.
+const messageTimeFormat = new Intl.DateTimeFormat('vi-VN', {
+  hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+});
+const messageDateFormat = new Intl.DateTimeFormat('vi-VN', {
+  day: '2-digit', month: '2-digit', year: 'numeric'
+});
+const messageWeekdayFormat = new Intl.DateTimeFormat('vi-VN', { weekday: 'long' });
+
+function sameMessageDay(first, second) {
+  return first.getFullYear() === second.getFullYear()
+    && first.getMonth() === second.getMonth()
+    && first.getDate() === second.getDate();
+}
+
+function messageTimeLabel(date) {
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  const clock = messageTimeFormat.format(date);
+  if (sameMessageDay(date, today)) return clock;
+  if (sameMessageDay(date, yesterday)) return `Hôm qua, ${clock}`;
+  const weekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  weekStart.setDate(weekStart.getDate() - 6);
+  if (date >= weekStart && date < today) {
+    return `${messageWeekdayFormat.format(date)}, ${clock}`;
+  }
+  return `${messageDateFormat.format(date)}, ${clock}`;
+}
+
+function decorateMessageTime(message) {
+  const rawTime = message.dataset.messageTime;
+  if (!rawTime || message.querySelector('.message-time')) return;
+  const date = new Date(rawTime);
+  if (Number.isNaN(date.getTime())) return;
+
+  const previous = message.previousElementSibling;
+  const previousTime = previous?.dataset.messageTime;
+  const previousDate = previousTime ? new Date(previousTime) : null;
+  if (!previousDate || Number.isNaN(previousDate.getTime())
+    || !sameMessageDay(date, previousDate)
+    || date - previousDate >= 15 * 60 * 1000) {
+    const separator = document.createElement('time');
+    separator.className = 'message-time-separator';
+    separator.dateTime = date.toISOString();
+    separator.textContent = messageTimeLabel(date);
+    message.before(separator);
+  }
+
+  const time = document.createElement('time');
+  time.className = 'message-time';
+  time.dateTime = date.toISOString();
+  time.textContent = messageTimeFormat.format(date);
+  time.title = `${messageDateFormat.format(date)}, ${time.textContent}`;
+  time.setAttribute('aria-label', `Gửi lúc ${time.title}`);
+  (message.querySelector('.inner-message') || message).appendChild(time);
+  message.tabIndex = 0;
+  message.addEventListener('click', (event) => {
+    if (event.target.closest('a, button, .inner-images')) return;
+    message.classList.toggle('show-message-time');
+  });
+  message.addEventListener('keydown', (event) => {
+    if (event.target !== message || !['Enter', ' '].includes(event.key)) return;
+    event.preventDefault();
+    message.classList.toggle('show-message-time');
+  });
+}
+
+document.querySelectorAll('.chat .inner-body [data-message-time]').forEach(decorateMessageTime);
+
 // File upload with preview
 const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-image', {
   multiple: true,
@@ -74,7 +144,10 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
 
   div.innerHTML = html;
 
+  // The current socket payload has no saved timestamp; use receipt time.
+  div.dataset.messageTime = data.createdAt || new Date().toISOString();
   body.appendChild(div);
+  decorateMessageTime(div);
 
   body.scrollTop = body.scrollHeight;
 

@@ -18,7 +18,7 @@ if(myRoomChat)
         div(class="tool-item" info) <i class="fa-solid fa-circle-info"></i>
     .inner-body
       each chat in chats 
-        div(class=(chat.user_id == myUser.id ? "inner-outcoming" : "inner-incoming" ))
+        div(class=(chat.user_id == myUser.id ? "inner-outcoming" : "inner-incoming" ) data-message-time=(chat.createdAt ? new Date(chat.createdAt).toISOString() : ""))
           if(chat.user_id != myUser.id)
             .inner-avatar
               img(src=(chat.user_avatar || "/client/images/avatar.jpg"), alt="")
