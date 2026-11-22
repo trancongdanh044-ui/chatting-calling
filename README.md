@@ -5,9 +5,6 @@
 Chatting & Calling là ứng dụng web nhắn tin và gọi thoại, video giữa hai người hoặc trong nhóm. Người dùng có thể tạo tài khoản, kết bạn, tham gia phòng chat và cập nhật hồ sơ cá nhân.
 
 ## Thông tin nhóm
-
-Cần bổ sung tên nhóm, chủ đề đã đăng ký và thông tin từng thành viên theo [hướng dẫn bài tập lớn](INSTRUCTION.md).
-
 | Họ và tên | MSSV | Email | Đóng góp |
 | Trần Công Danh | B23DCCN122| danhtc.b23cn122@stu.ptit.edu.vn | Thiết kế cơ sở dữ liệu, xây dựng tính năng nhắn tin và kết bạn|
 | Nguyễn Văn Du | B23DCCN164| dunv.b23cn164@stu.ptit.edu.vn | Thiết kế giao diện, xây dựng tính năng đăng nhập, đăng ký, trang cá nhân của người dùng|
