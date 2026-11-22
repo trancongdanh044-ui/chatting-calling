@@ -272,7 +272,28 @@ module.exports.leave = async (req, res) => {
   }
 };
 
-// [DELETE] /group/disband/:roomChatId
+// [PATCH] /group/disband/:roomChatId
 module.exports.disband = async (req, res) => {
-  res.send('ok');
+  try{
+    const myUser = res.locals.myUser;
+    const roomChatId = req.params.roomChatId;
+    const result = await RoomChat.updateOne({
+      _id: roomChatId,
+      deleted: false,
+      typeRoom: "group",
+      users: {
+        $elemMatch:{
+          user_id: myUser.id,
+          role: "superAdmin"
+        }
+      }
+    }, {deleted: true});
+    console.log(result);
+    req.flash("sucess", "Giải tán nhóm thành công !");
+    res.redirect(req.get("Referrer") || "/chat");
+  }catch(error){
+    console.log(error);
+    req.flash("error", "Giải tán nhóm thất bại !");
+    res.redirect(req.get("Referrer") || "/chat");
+  }
 }

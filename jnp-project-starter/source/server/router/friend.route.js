@@ -11,4 +11,6 @@ router.get("/request", controller.request);
 
 router.get("/invitation", controller.invitation);
 
+router.get("/delete/:friendId", controller.deleteFriend);
+
 module.exports = router;

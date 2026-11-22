@@ -22,7 +22,11 @@ block main
                   a(
                     href=`/chat/${friend.roomChatId}`
                     class="btn btn-sm btn-primary mr-1"
-                  ) Nhắn tin 
+                  ) Nhắn tin
+                  a(
+                    href=`/friend/delete/${friend.id}`
+                    class="btn btn-sm btn-danger mr-1"
+                  ) Huỷ kết bạn 
               div(
                 class="inner-status"
                 status=friend.statusOnline

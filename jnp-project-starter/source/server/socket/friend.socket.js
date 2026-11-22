@@ -77,7 +77,6 @@ module.exports = async (req, res) => {
       // Hết trả về số lời mời kết bạn
     });
 
-
     // Tính năng thu hồi kết bạn
     socket.on("CLIENT_REVOKE_REQUEST", async (data) => {
       const myUserId = myUser.id; // userAId - người (chủ động) huỷ yêu cầu kết bạn
@@ -108,7 +107,6 @@ module.exports = async (req, res) => {
         myUserId: userId
       });
     });
-
 
     // Tính năng từ chối kết bạn
     socket.on("CLIENT_REFUSE_FRIEND", async (data) => {
@@ -144,7 +142,6 @@ module.exports = async (req, res) => {
       sizeAlert.lengthOfInviationWithEmit(myUserId, socket);
     });
 
-
     // Tính năng chấp nhận kết bạn
     socket.on("CLIENT_ACCEPT_FRIEND", async (data) => {
       const myUserId = myUser.id; // userAId - người chấp nhận
@@ -161,7 +158,25 @@ module.exports = async (req, res) => {
         requestFriends: myUserId
       });
       let roomChat;
-      if(userAInB && userBInA){
+      const existedRoomChat = await RoomChat.findOne({
+        typeRoom: "friend",
+        $and: [
+          {users: {
+            $elemMatch: {
+              user_id: myUserId,
+              role: "superAdmin"
+            } 
+          }},
+          {users: {
+            $elemMatch: {
+              user_id: userId,
+              role: "superAdmin"
+            } 
+          }}
+        ]
+      });
+      if (!userAInB || !userBInA) return;
+      if(!existedRoomChat){
         roomChat = new RoomChat({
           typeRoom: "friend",
           users:[
@@ -176,6 +191,12 @@ module.exports = async (req, res) => {
           ]
         });
         await roomChat.save();
+      }else{
+        roomChat = existedRoomChat;
+        if(roomChat.deleted){
+          roomChat.deleted = false;
+          await roomChat.save();
+        }
       }
       await User.updateOne({
         _id: myUserId,

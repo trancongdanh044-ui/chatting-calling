@@ -95,3 +95,53 @@ module.exports.invitation = async(req, res) =>{
     invitationFriends: invitationFriends
   });
 }
+
+// [GET] /friend/delete/:friendId
+module.exports.deleteFriend = async(req, res) =>{
+  try{
+    const myUser = res.locals.myUser;
+    const friendId = req.params.friendId;
+
+    // Xoá kết bạn ở phía mình
+    const resultFriend1 = await User.updateOne({
+      _id: myUser.id,
+      deleted: false,
+    }, {
+      $pull: {friendsList: {user_id :friendId}}
+    });
+    
+    // Xoá kết bạn ở phía người còn lại
+    const resultFriend2 = await User.updateOne({
+      _id: friendId,
+    }, {
+      $pull: {friendsList: {user_id: myUser.id}}
+    })
+    console.log(resultFriend1);
+    console.log(resultFriend2);
+
+    // Chuyển trạng thái phòng chat sang deleted: true
+    const resultRoomChat = await RoomChat.updateOne({
+      typeRoom: "friend",
+      deleted: false,
+      $and:[
+        {users: {
+          $elemMatch: {
+            user_id: myUser.id,
+            role: "superAdmin"
+          }
+        }},
+        {users: {
+          $elemMatch: {
+            user_id: friendId,
+            role: "superAdmin"
+          }
+        }}
+      ]
+    }, {deleted: true});
+    console.log(resultRoomChat);
+    res.redirect(req.get("Referrer") || "/friend");
+  }catch(error){
+    console.log(error);
+    res.redirect(req.get("Referrer") || "/friend");
+  }
+}
