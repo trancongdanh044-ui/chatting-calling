@@ -4,7 +4,6 @@ module.exports.searchRoomChat = (query, roomChatList) => {
     roomChatList = roomChatList.filter((room) => {
       return keywordRegex.test(room.title);
     });
-    return roomChatList;
   }
 
   if(query.typeRoom){

@@ -85,7 +85,7 @@ module.exports.signUpPost = async (req, res) => {
       });
       const result = await objectUser.save();
       req.flash("success", "Đăng ký thành công!");
-      res.redirect("/");
+      res.redirect("/auth/login");
     }
   } catch (error) {
     console.log(error);

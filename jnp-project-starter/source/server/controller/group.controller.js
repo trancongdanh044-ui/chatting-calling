@@ -35,6 +35,10 @@ module.exports.create = async (req, res) => {
 module.exports.createPost = async (req, res) => {
   const myUser = res.locals.myUser;
   const groupName = req.body.groupName;
+  if(!groupName){
+    req.flash("error", "Bạn phải thêm tên nhóm !");
+    return res.redirect(req.get("Referrer") || "/chat");
+  }
   const members = req.body.members || [];
   if (typeof members === "string" || members.length < 2) {
     req.flash("error", "Chỉ cho phép tạo nhóm từ 3 người trở lên !");
