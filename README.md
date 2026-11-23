@@ -6,6 +6,7 @@ Chatting & Calling là ứng dụng web nhắn tin và gọi thoại, video gi�
 
 ## Thông tin nhóm
 | Họ và tên | MSSV | Email | Đóng góp |
+|-----------|------|-------|----------|
 | Trần Công Danh | B23DCCN122| danhtc.b23cn122@stu.ptit.edu.vn | Thiết kế cơ sở dữ liệu, xây dựng tính năng nhắn tin và kết bạn|
 | Nguyễn Văn Du | B23DCCN164| dunv.b23cn164@stu.ptit.edu.vn | Thiết kế giao diện, xây dựng tính năng đăng nhập, đăng ký, trang cá nhân của người dùng|
 | Nguyễn Khả Luận | B23DCCN514| luannk.b23cn514@stu.ptit.edu.vn | Thiết kế cơ sở dữ liệu, xây dựng tính năng gọi thoại và gọi video|
