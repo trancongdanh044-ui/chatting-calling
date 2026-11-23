@@ -4,6 +4,7 @@ const friendRoute = require('./friend.route');
 const chatRoute = require('./chat.route');
 const groupRoute = require('./group.route');
 const profileRoute = require('./profile.route');
+const forgotPasswordRoute = require('./forgot-password.route');
 
 const authMiddleware = require('../middleware/auth.middleware');
 
@@ -13,6 +14,8 @@ module.exports = (app) =>{
   app.get("/", (req, res) =>{
     return res.redirect("/chat");
   });
+
+  app.use("/forgot", forgotPasswordRoute);
 
   app.use("/friend", authMiddleware.requireAuth, friendRoute);
 

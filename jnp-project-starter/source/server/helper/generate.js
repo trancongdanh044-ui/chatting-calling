@@ -6,3 +6,12 @@ module.exports.generateRandomString = (length) =>{
   }
   return result;
 }
+
+module.exports.generateOTP = (length) => {
+  const str = "0123456789";
+  let otp = "";
+  for(let i = 0; i < length; ++i){
+    otp += str.charAt(Math.ceil(str.length*Math.random()));
+  }
+  return otp;
+}

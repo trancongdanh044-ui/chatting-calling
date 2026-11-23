@@ -1,6 +1,7 @@
 const Chat = require('../model/chat.model');
 const RoomChat = require('../model/room-chat.model');
 const uploadImage = require('../helper/uploadImage');
+const sizeAlert = require('../helper/size-alert');
 
 module.exports = async(req, res) =>{
   const myUser = res.locals.myUser;
@@ -47,5 +48,7 @@ module.exports = async(req, res) =>{
         images:  urlImages
       });
     });
+
+    // sizeAlert.lengthOfInviationWithEmit(myUser.id, socket);
   });
 }

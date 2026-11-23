@@ -355,7 +355,6 @@ if (infoPanel && infoToggle) {
     }).observe(messageBody, { childList: true, subtree: true, attributes: true, attributeFilter: ['src'] });
   }
 }
-
 // End Chat Info
 
 // Group member list
@@ -409,3 +408,21 @@ if(formDataGroup){
   });
 }
 // Hết rời khỏi nhóm && giải tán nhóm
+
+// // SERVER RETURN LENGTH OF INVITATION
+// socket.on("SERVER_RETURN_LENGTH_INVITATION", (data) =>{
+//   const myUserHeader = document.querySelector("[my-user-id]");
+//   if(myUserHeader){
+//     const myUserId = myUserHeader.getAttribute("my-user-id");
+//     const userId = data.userId;
+//     if(myUserId === userId){
+//       const badge = myUserHeader.querySelector(".badge-danger");
+//       if(data.lengthOfInvitation > 0){
+//         badge.innerHTML = data.lengthOfInvitation;
+//       }else{
+//         badge.style.display = "none"; 
+//       }
+//     }
+//   }
+// });
+// // END SERVER RETURN LENGTH OF INVITATION
