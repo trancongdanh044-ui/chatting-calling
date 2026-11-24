@@ -105,6 +105,24 @@ if (messageForm) {
 }
 // Hết gửi tin nhắn
 
+// Bắt thay đối danh sách phòng chat khi có tin nhắn mới
+socket.on("SERVER_RETURN_SORT_ROOM_CHAT", (data) =>{
+  console.log(data);
+  const menuItem = document.querySelector("[menu-item]");
+  const roomChat = menuItem.querySelector(`[room-chat-id="${data.roomChatId}"]`);
+  if(roomChat){
+    menuItem.removeChild(roomChat);
+    roomChat.querySelector(".message-brief").innerHTML = `<b>Có tin nhắn mới !</b>`
+    menuItem.prepend(roomChat); 
+  }
+  else{
+    console.log("Bạn không có phòng này !");
+  }
+  console.log(roomChat);
+});
+// Hết bắt thay đối danh sách phòng chat khi có tin nhắn mới
+
+
 // SERVER_RETURN_MESSAGE
 socket.on("SERVER_RETURN_MESSAGE", (data) => {
   const myUserId = document.querySelector("[my-user-id]").getAttribute("my-user-id");

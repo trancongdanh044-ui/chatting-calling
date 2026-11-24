@@ -2,6 +2,7 @@ const Chat = require('../model/chat.model');
 const RoomChat = require('../model/room-chat.model');
 const uploadImage = require('../helper/uploadImage');
 const sizeAlert = require('../helper/size-alert');
+const roomChatHepler = require('../helper/room-chat');
 
 module.exports = async(req, res) =>{
   const myUser = res.locals.myUser;
@@ -47,8 +48,12 @@ module.exports = async(req, res) =>{
         avatar: myUser.avatar,
         images:  urlImages
       });
-    });
 
+      // SERVER trả về danh sách phòng chat mới khi có thay đổi
+      _io.emit("SERVER_RETURN_SORT_ROOM_CHAT", {roomChatId});
+    });
+    
+    
     // sizeAlert.lengthOfInviationWithEmit(myUser.id, socket);
   });
 }

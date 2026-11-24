@@ -9,10 +9,10 @@ div(class="menu")
       div(class="feature-item active" filter="all") Tất cả
       div(class="feature-item" filter="friend") Bạn bè
       div(class="feature-item" filter="group") Nhóm
-    div(class="menu-item")
+    div(class="menu-item" menu-item)
       if(roomChatList.length > 0)
         each roomChat in roomChatList
-          a(class="inner-item" href=`/chat/${roomChat.id}`)
+          a(class="inner-item" room-chat-id=roomChat.id href=`/chat/${roomChat.id}`)
             div(class="box-avatar" my-friend-id=(roomChat.friendId || ""))
               img(src=roomChat.avatar, alt="Avatar Chat")
               div(class="box-status" status-online=roomChat.statusOnlineFriend)
